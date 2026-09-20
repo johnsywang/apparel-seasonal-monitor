@@ -1,0 +1,1509 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>服饰秋冬应季品消耗监控看板 · 2026年9月MTD</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#0b1220;color:#e8eefc;font:14px/1.6 "Microsoft YaHei","Segoe UI",sans-serif;
+ -webkit-font-smoothing:antialiased}
+.wrap{max-width:1400px;margin:0 auto;padding:30px 26px 70px}
+.hero{background:linear-gradient(115deg,#14213d 0%,#1b2f52 45%,#123044 100%);
+ border-radius:18px;padding:32px 36px;border:1px solid #27406b;position:relative;overflow:hidden}
+.hero:after{content:"";position:absolute;right:-70px;top:-70px;width:280px;height:280px;
+ background:radial-gradient(circle,#3ea6ff44,transparent 70%)}
+h1{font-size:29px;letter-spacing:.5px}
+.sub{color:#9fb4d8;margin-top:9px;font-size:13.5px}
+.pill{display:inline-block;background:#3ea6ff22;border:1px solid #3ea6ff55;color:#8fd0ff;
+ padding:3px 11px;border-radius:20px;font-size:12px;margin-right:7px;margin-top:11px}
+section{margin-top:34px}
+.sh{display:flex;align-items:center;gap:12px;margin-bottom:16px}
+.sh .no{background:linear-gradient(135deg,#3ea6ff,#66e08f);color:#04101f;font-weight:700;
+ width:30px;height:30px;border-radius:9px;display:grid;place-items:center;font-size:15px}
+.sh h2{font-size:19.5px}
+.sh .hint{color:#7e94b8;font-size:12.5px;margin-left:auto}
+.card{background:#111b2e;border:1px solid #22335a;border-radius:14px;padding:22px 24px}
+.sub-h{font-size:15px;color:#bdd2f2;margin:22px 0 11px;padding-left:10px;
+ border-left:3px solid #3ea6ff;font-weight:600}
+.sub-h:first-child{margin-top:0}
+/* KPI */
+.kpis{display:grid;grid-template-columns:repeat(5,1fr);gap:14px}
+.k{background:linear-gradient(160deg,#152442,#101a2e);border:1px solid #243a63;
+ border-radius:13px;padding:18px 18px 16px;position:relative}
+.k .kl{color:#8ea6cc;font-size:12.5px}
+.k .kv{font-size:31px;font-weight:700;margin-top:5px;letter-spacing:-.5px}
+.k .ku{font-size:14px;color:#9fb4d8;margin-left:3px;font-weight:400}
+.k .kx{color:#6f86ab;font-size:11.5px;margin-top:6px}
+.k.hl{background:linear-gradient(160deg,#1b3a2c,#102318);border-color:#2f6b4a}
+.k.hl .kv{color:#66e08f}
+.k.b2 .kv{color:#8fd0ff}
+.k.b3 .kv{color:#ffb74d}
+/* 2 端对比 */
+.duo{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:4px}
+.dbox{background:#0e1830;border:1px solid #22335a;border-radius:13px;padding:19px 21px}
+.dbox h3{font-size:16px;display:flex;align-items:center;gap:8px}
+.dbox h3 em{font-style:normal;font-size:11.5px;color:#7e94b8;font-weight:400}
+.dline{margin-top:14px;font-size:14.6px;line-height:2.1;color:#cfdcf2}
+.dline b{color:#fff;font-size:18px;font-weight:700}
+.dline .g{color:#66e08f}.dline .o{color:#ffb74d}.dline .bl{color:#8fd0ff}
+.dbox.adq{border-left:3px solid #3ea6ff}
+.dbox.qyt{border-left:3px solid #b78cff}
+/* 表格 */
+.t{width:100%;border-collapse:collapse;margin-top:6px;font-size:13.2px}
+.t th{background:#16243f;color:#9fb4d8;font-weight:600;padding:10px 11px;text-align:right;
+ border-bottom:1px solid #27406b;white-space:nowrap;font-size:12.5px}
+.t th:first-child,.t th:nth-child(2){text-align:left}
+.t td{padding:9px 11px;border-bottom:1px solid #1b2942;text-align:right}
+.t tbody tr:hover{background:#16243f88}
+.t .nm{text-align:left;color:#e8eefc;font-weight:600}
+.t .nm2{text-align:left;color:#dce7f8}
+.t .num{font-variant-numeric:tabular-nums}
+.t .strong{color:#66e08f;font-weight:700;font-size:14px}
+.t .rate{color:#8fd0ff}
+.t .boom{color:#ffb74d;font-weight:600}
+.t .dim{color:#6f86ab}
+.t .tag2{text-align:left;color:#9fb4d8;font-size:12.3px}
+.t .st{text-align:left;color:#ffb74d;font-size:12.3px}
+.t .spu{text-align:left;color:#5c718f;font-size:11.5px;font-family:Consolas,monospace}
+.barc{padding:9px 11px!important}
+.bar{height:7px;background:linear-gradient(90deg,#3ea6ff,#66e08f);border-radius:4px;min-width:2px}
+.warn{color:#ff7a7a;background:#ff7a7a1c;padding:2px 8px;border-radius:5px;font-size:12px}
+.low{color:#ffb74d;background:#ffb74d1c;padding:2px 8px;border-radius:5px;font-size:12px}
+.ok{color:#66e08f;background:#66e08f1c;padding:2px 8px;border-radius:5px;font-size:12px}
+.note{color:#7e94b8;font-size:12.3px;margin-top:11px;padding:9px 12px;background:#0e1830;
+ border-left:2px solid #3ea6ff66;border-radius:0 7px 7px 0}
+/* 规则卡 */
+.grid-r{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+.rc{background:#0e1830;border:1px solid #22335a;border-left:3px solid var(--c);
+ border-radius:11px;padding:17px 19px}
+.rh{display:flex;align-items:center;gap:10px}
+.rcode{background:var(--c);color:#06101d;font-weight:700;font-size:11.5px;padding:2px 8px;border-radius:5px}
+.rname{font-size:15.5px;font-weight:700;color:var(--c)}
+.rwhy{color:#9fb4d8;font-size:12.6px;margin:8px 0 10px}
+.rdet{color:#cfdcf2;font-size:12.8px;line-height:1.95}
+.rdet b{color:#ffb74d}
+/* 图表 */
+.chart{width:100%;height:auto;display:block}
+.grid{stroke:#1e2d4b;stroke-width:1}
+.ax{fill:#7e94b8;font-size:11.5px}
+.ax-t{fill:#9fb4d8;font-size:12.5px}
+.wv{fill:#8fd0ff;font-size:11.5px;text-anchor:middle}
+.note-sv{fill:#ff9e5e;font-size:11.5px}
+.cost-lb{fill:#66e08f;font-size:13px;font-weight:700}
+.cost-lb2{fill:#9fb4d8;font-size:11.5px}
+.legend{display:flex;gap:22px;flex-wrap:wrap;justify-content:center;margin-top:8px;
+ color:#9fb4d8;font-size:12.5px}
+.legend i{display:inline-block;width:13px;height:4px;border-radius:2px;margin-right:6px;
+ vertical-align:middle}
+.grid-w{display:grid;grid-template-columns:repeat(5,1fr);gap:11px;margin-top:18px}
+.wc{background:#0e1830;border:1px solid #22335a;border-radius:10px;padding:13px 14px}
+.wt{font-size:13.5px;font-weight:700;color:#8fd0ff}
+.wd{display:block;color:#ffb74d;font-size:12px;font-weight:600;margin-top:2px}
+.wx{color:#9fb4d8;font-size:11.8px;margin-top:7px;line-height:1.7}
+/* 抖音卡片 */
+.tabs{display:flex;gap:8px;margin-bottom:16px}
+.tab{background:#16243f;border:1px solid #27406b;color:#9fb4d8;padding:7px 18px;
+ border-radius:8px;cursor:pointer;font-size:13.5px;user-select:none}
+.tab.on{background:linear-gradient(135deg,#3ea6ff,#66e08f);color:#04101f;font-weight:700;
+ border-color:transparent}
+.pane{display:none}.pane.on{display:block}
+.grid-g{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}
+.gcard{background:#0e1830;border:1px solid #22335a;border-radius:11px;overflow:hidden;
+ text-decoration:none;color:inherit;position:relative;transition:.15s;display:block}
+.gcard:hover{border-color:#3ea6ff;transform:translateY(-2px)}
+.rk{position:absolute;left:8px;top:8px;z-index:2;background:#04101fcc;color:#66e08f;
+ font-size:11.5px;font-weight:700;width:22px;height:22px;border-radius:6px;display:grid;
+ place-items:center}
+.ph{aspect-ratio:1;background:#16243f;overflow:hidden}
+.ph img{width:100%;height:100%;object-fit:cover;display:block}
+.ph.noimg:after{content:"图片需外网";display:grid;place-items:center;height:100%;
+ color:#5c718f;font-size:11.5px}
+.ph.noimg img{display:none}
+.gi{padding:10px 11px 12px}
+.gn{font-size:12.4px;line-height:1.55;height:3.1em;overflow:hidden;color:#e8eefc}
+.gm{display:flex;align-items:center;gap:6px;margin-top:7px;flex-wrap:wrap}
+.vol{color:#66e08f;font-size:12px;font-weight:700}
+.lv{font-size:10.5px;padding:1px 6px;border-radius:4px}
+.lv.S{background:#ff9e5e26;color:#ff9e5e}
+.lv.A{background:#66e08f26;color:#66e08f}
+.gs{color:#7e94b8;font-size:11.3px;margin-top:5px;white-space:nowrap;overflow:hidden;
+ text-overflow:ellipsis}
+.gr{color:#5c718f;font-size:10.8px;margin-top:4px}
+.foot{margin-top:40px;color:#5c718f;font-size:12px;text-align:center;line-height:1.9;
+ border-top:1px solid #1b2942;padding-top:20px}
+@media(max-width:1200px){.kpis{grid-template-columns:repeat(3,1fr)}
+ .grid-g,.grid-w{grid-template-columns:repeat(3,1fr)}
+ .duo,.grid-r{grid-template-columns:1fr}}
+</style></head><body><div class="wrap">
+
+<div class="hero">
+  <h1>服饰秋冬应季品消耗监控看板</h1>
+  <div class="sub">数据窗口：2026年9月1日 — 9月18日（MTD 18天）｜口径：SPU 去重计商品数，消耗与下单次数加总</div>
+  <div>
+    <span class="pill">大盘日均消耗 739.2 万元</span>
+    <span class="pill">应季品占大盘 24.7%</span>
+    <span class="pill">起量线：累计下单 &gt; 110 次</span>
+    <span class="pill">爆量线：日均消耗 &gt; 1 万元</span>
+    <span class="pill">生成时间 2026-09-20</span>
+  </div>
+</div>
+
+<section>
+  <div class="sh"><span class="no">1</span><h2>秋冬应季品判定规则</h2>
+    <span class="hint">双通道判定：商品四级类目 + SPU 名称材质/款式词，排除优先于命中</span></div>
+  <div class="card"><div class="grid-r"><div class="rc" style="--c:#ff7a7a">
+      <div class="rh"><span class="rcode">L0</span><span class="rname">硬排除</span></div>
+      <div class="rwhy">先剔除夏季品与无季节属性品，避免误判</div>
+      <div class="rdet">类目：T恤 / Polo衫 / 背心吊带 / 泳装 / 拖鞋凉鞋 / 防晒衣帽 / 速干裤 / 蕾丝雪纺衫<br>名称：短袖、无袖、短裤、冰丝、凉感、速干、防晒、雪纺、蕾丝、泳、拖鞋、五分/七分裤、超薄、轻薄、薄款</div></div><div class="rc" style="--c:#ff9e5e">
+      <div class="rh"><span class="rcode">L1</span><span class="rname">S 核心秋冬</span></div>
+      <div class="rwhy">强季节属性，降温直接驱动转化，是监控主对象</div>
+      <div class="rdet">类目：羽绒服 / 棉衣棉服 / 毛呢大衣 / 羊绒衫羊毛衫 / 保暖上衣·裤·套装 / 雪地靴 / 马丁靴 / 冲锋衣 / 抓绒摇粒绒 / 皮衣皮草 / 连裤袜打底袜 / 长筒袜<br>名称材质：羽绒、鹅绒、鸭绒、羊绒、羊毛、德绒、摇粒绒、抓绒、加绒、貂绒、驼绒、法兰绒、灯芯绒、毛呢、加厚、夹棉、棉服棉袄棉裤、保暖、发热、蓄热、锁温、御寒、磨毛</div></div><div class="rc" style="--c:#66e08f">
+      <div class="rh"><span class="rcode">L2</span><span class="rname">A 秋季过渡</span></div>
+      <div class="rwhy">秋季主力款式，换季初期先起量，是拓品窗口</div>
+      <div class="rdet">类目：卫衣 / 夹克 / 风衣 / 短外套中长款外套 / 毛衣针织衫 / 马甲 / 打底衫 / 打底裤 / 围巾披肩 / 睡衣家居服 / 新中式 / 西装套装 / 塑身衣<br>名称款式：长袖、外套、开衫、高领、堆堆领、连帽、针织、毛衣、卫衣、夹克、风衣、马甲、长款/中长款、套头、立领、秋冬/秋款/冬款</div></div><div class="rc" style="--c:#8ea2c6">
+      <div class="rh"><span class="rcode">L3</span><span class="rname">全年款需材质佐证</span></div>
+      <div class="rwhy">避免把全年常销款整体计入应季，虚高分母</div>
+      <div class="rdet">休闲裤 / 牛仔裤 / 衬衫 / 各类皮鞋板鞋运动鞋 / 内裤 / 文胸 / 短袜 / 帽子 / 连衣裙 / 半身裙 等，<b>仅当 SPU 名称含 L1 秋冬材质词时</b>（如「加绒牛仔裤」「羊毛衬衫」）才计入应季，否则判非应季</div></div></div>
+    <p class="note">判定结果：全库 16,987 个在投 SPU 中识别出 <b>4,341</b> 个秋冬应季品
+    （占比 25.6%），其中 S 核心秋冬 1,754 个、
+    A 秋季过渡 2,654 个。
+    同一 SPU 若在多个类目/链路/投放端有投放记录，分维度统计时会在各维度分别计数，
+    因此分维度在投数之和 ≥ 应季品去重总数。</p>
+  </div>
+</section>
+
+<section>
+  <div class="sh"><span class="no">2</span><h2>应季品业绩总览</h2>
+    <span class="hint">9月MTD 全量应季品</span></div>
+  <div class="card">
+    <div class="kpis">
+      <div class="k b2"><div class="kl">在投应季商品数</div>
+        <div class="kv">4,341<span class="ku">个</span></div>
+        <div class="kx">SPU 去重｜占全库在投 25.6%</div></div>
+      <div class="k"><div class="kl">起量商品数</div>
+        <div class="kv">726<span class="ku">个</span></div>
+        <div class="kx">累计下单&gt;110次｜起量率 16.7%</div></div>
+      <div class="k b3"><div class="kl">爆量商品数</div>
+        <div class="kv">39<span class="ku">个</span></div>
+        <div class="kx">日均消耗&gt;1万元｜爆量率 0.9%</div></div>
+      <div class="k hl"><div class="kl">应季品日均消耗</div>
+        <div class="kv">182.5<span class="ku">万元</span></div>
+        <div class="kx">占大盘 24.7%</div></div>
+      <div class="k"><div class="kl">应季品户均日耗</div>
+        <div class="kv">420<span class="ku">元</span></div>
+        <div class="kx">全库均值 435 元</div></div>
+    </div>
+
+    <div class="sub-h">2.1 分投放端</div>
+    <div class="duo">
+      <div class="dbox adq"><h3>ADQ<em>是否全域通 = false</em></h3>
+        <div class="dline">在投 spu 数 <b class="bl">2,344</b> 个，
+          起量 spu 数 <b class="g">434</b> 个（起量率 18.5%），
+          爆量 spu 数 <b class="o">36</b> 个，
+          共带来日均消耗 <b class="g">144.0</b> 万元
+          （占应季品 78.9%）。</div></div>
+      <div class="dbox qyt"><h3>全域通<em>是否全域通 = true</em></h3>
+        <div class="dline">在投 spu 数 <b class="bl">2,719</b> 个，
+          起量 spu 数 <b class="g">390</b> 个（起量率 14.3%），
+          爆量 spu 数 <b class="o">1</b> 个，
+          共带来日均消耗 <b class="g">38.5</b> 万元
+          （占应季品 21.1%）。</div></div>
+    </div>
+    <table class="t">
+  <thead><tr><th>投放端</th><th>在投SPU</th><th>起量SPU</th><th>起量率</th>
+  <th>爆量SPU</th><th>日均消耗(万)</th><th>消耗占比</th><th style="width:150px">占比图</th></tr></thead>
+  <tbody><tr>
+      <td class="nm">ADQ（非全域通）</td>
+      <td class="num">2,344</td>
+      <td class="num">434</td>
+      <td class="num rate">18.5%</td>
+      <td class="num boom">36</td>
+      <td class="num strong">144.0</td>
+      <td class="num">78.9%</td>
+      <td class="barc"><div class="bar" style="width:78.9%"></div></td>
+    </tr><tr>
+      <td class="nm">全域通</td>
+      <td class="num">2,719</td>
+      <td class="num">390</td>
+      <td class="num rate">14.3%</td>
+      <td class="num boom">1</td>
+      <td class="num strong">38.5</td>
+      <td class="num">21.1%</td>
+      <td class="barc"><div class="bar" style="width:21.1%"></div></td>
+    </tr></tbody></table>
+    <p class="note">全域通在投 SPU 数已超过 ADQ（2,719 vs 2,344），
+    但消耗仅为 ADQ 的 27%、爆量 SPU 仅 1 个，
+    说明全域通侧仍处于"铺量未起量"阶段，单 SPU 产出（142 元 vs
+    ADQ 614 元）差距明显，是换季期重点提效方向。</p>
+
+    <div class="sub-h">2.2 分类目</div>
+    <table class="t">
+  <thead><tr><th>类目</th><th>在投SPU</th><th>起量SPU</th><th>起量率</th>
+  <th>爆量SPU</th><th>日均消耗(万)</th><th>消耗占比</th><th style="width:150px">占比图</th></tr></thead>
+  <tbody><tr>
+      <td class="nm">男装</td>
+      <td class="num">937</td>
+      <td class="num">168</td>
+      <td class="num rate">17.9%</td>
+      <td class="num boom">16</td>
+      <td class="num strong">63.9</td>
+      <td class="num">35.0%</td>
+      <td class="barc"><div class="bar" style="width:35.0%"></div></td>
+    </tr><tr>
+      <td class="nm">女装</td>
+      <td class="num">1,407</td>
+      <td class="num">192</td>
+      <td class="num rate">13.6%</td>
+      <td class="num boom">9</td>
+      <td class="num strong">38.7</td>
+      <td class="num">21.2%</td>
+      <td class="barc"><div class="bar" style="width:21.2%"></div></td>
+    </tr><tr>
+      <td class="nm">内衣裤袜/睡衣/家居服</td>
+      <td class="num">718</td>
+      <td class="num">141</td>
+      <td class="num rate">19.6%</td>
+      <td class="num boom">4</td>
+      <td class="num strong">30.1</td>
+      <td class="num">16.5%</td>
+      <td class="barc"><div class="bar" style="width:16.5%"></div></td>
+    </tr><tr>
+      <td class="nm">男鞋</td>
+      <td class="num">80</td>
+      <td class="num">2</td>
+      <td class="num rate">2.5%</td>
+      <td class="num boom">0</td>
+      <td class="num strong">0.4</td>
+      <td class="num">0.2%</td>
+      <td class="barc"><div class="bar" style="width:0.2%"></div></td>
+    </tr><tr>
+      <td class="nm">女鞋</td>
+      <td class="num">149</td>
+      <td class="num">20</td>
+      <td class="num rate">13.4%</td>
+      <td class="num boom">0</td>
+      <td class="num strong">2.3</td>
+      <td class="num">1.2%</td>
+      <td class="barc"><div class="bar" style="width:1.2%"></div></td>
+    </tr><tr>
+      <td class="nm">珠宝/首饰/手表</td>
+      <td class="num">9</td>
+      <td class="num">2</td>
+      <td class="num rate">22.2%</td>
+      <td class="num boom">0</td>
+      <td class="num strong">0.3</td>
+      <td class="num">0.2%</td>
+      <td class="barc"><div class="bar" style="width:0.2%"></div></td>
+    </tr><tr>
+      <td class="nm">运动户外</td>
+      <td class="num">395</td>
+      <td class="num">62</td>
+      <td class="num rate">15.7%</td>
+      <td class="num boom">3</td>
+      <td class="num strong">15.2</td>
+      <td class="num">8.3%</td>
+      <td class="barc"><div class="bar" style="width:8.3%"></div></td>
+    </tr><tr>
+      <td class="nm">其他</td>
+      <td class="num">1,289</td>
+      <td class="num">163</td>
+      <td class="num rate">12.6%</td>
+      <td class="num boom">5</td>
+      <td class="num strong">31.5</td>
+      <td class="num">17.3%</td>
+      <td class="barc"><div class="bar" style="width:17.3%"></div></td>
+    </tr></tbody></table><p class="note">类目口径：取「商品统一类目V2」首个"-"后文字，命中 男装/女装/内衣裤袜·睡衣·家居服/男鞋/女鞋 则归入该二级类目；否则取首个"-"前文字，命中 珠宝·首饰·手表/运动户外 则归入该一级类目；其余（含类目为「空」「0」的记录）统一归入「其他」。</p>
+
+    <div class="sub-h">2.3 分消费链路</div>
+    <table class="t">
+  <thead><tr><th>消费链路</th><th>在投SPU</th><th>起量SPU</th><th>起量率</th>
+  <th>爆量SPU</th><th>日均消耗(万)</th><th>消耗占比</th><th style="width:150px">占比图</th></tr></thead>
+  <tbody><tr>
+      <td class="nm">直播</td>
+      <td class="num">1,524</td>
+      <td class="num">294</td>
+      <td class="num rate">19.3%</td>
+      <td class="num boom">8</td>
+      <td class="num strong">58.1</td>
+      <td class="num">31.8%</td>
+      <td class="barc"><div class="bar" style="width:31.8%"></div></td>
+    </tr><tr>
+      <td class="nm">小店</td>
+      <td class="num">2,968</td>
+      <td class="num">421</td>
+      <td class="num rate">14.2%</td>
+      <td class="num boom">10</td>
+      <td class="num strong">69.4</td>
+      <td class="num">38.0%</td>
+      <td class="barc"><div class="bar" style="width:38.0%"></div></td>
+    </tr><tr>
+      <td class="nm">CID</td>
+      <td class="num">835</td>
+      <td class="num">115</td>
+      <td class="num rate">13.8%</td>
+      <td class="num boom">16</td>
+      <td class="num strong">55.0</td>
+      <td class="num">30.1%</td>
+      <td class="barc"><div class="bar" style="width:30.1%"></div></td>
+    </tr></tbody></table>
+    <p class="note">小店链路铺量最广（2,968 SPU）但户均日耗最低；
+    CID 链路以 835 个 SPU 贡献 55.0 万元，
+    爆量 SPU 达 16 个（全链路最多），单 SPU 产出
+    659 元，为效率最高链路。</p>
+
+    <div class="sub-h">2.4 分应季等级</div>
+    <table class="t">
+  <thead><tr><th>应季等级</th><th>在投SPU</th><th>起量SPU</th><th>起量率</th>
+  <th>爆量SPU</th><th>日均消耗(万)</th><th>消耗占比</th><th style="width:150px">占比图</th></tr></thead>
+  <tbody><tr>
+      <td class="nm">S 核心秋冬</td>
+      <td class="num">1,754</td>
+      <td class="num">258</td>
+      <td class="num rate">14.7%</td>
+      <td class="num boom">8</td>
+      <td class="num strong">54.4</td>
+      <td class="num">29.8%</td>
+      <td class="barc"><div class="bar" style="width:29.8%"></div></td>
+    </tr><tr>
+      <td class="nm">A 秋季过渡</td>
+      <td class="num">2,654</td>
+      <td class="num">474</td>
+      <td class="num rate">17.9%</td>
+      <td class="num boom">31</td>
+      <td class="num strong">128.1</td>
+      <td class="num">70.2%</td>
+      <td class="barc"><div class="bar" style="width:70.2%"></div></td>
+    </tr></tbody></table><p class="note">A 秋季过渡款（卫衣/夹克/外套/针织等）当前仍是消耗主力，S 核心秋冬款（羽绒/棉服/保暖/毛呢等）在投 SPU 已达一定规模但爆量仅 8 个，随 9 月下旬冷空气密集期到来，S 层是最需要提前备量与加投的品类。</p>
+
+    <div class="sub-h">2.5 应季品 TOP20 细分类目</div>
+    <table class="t">
+  <thead><tr><th style="width:38px">#</th><th>应季四级类目</th><th>在投SPU</th>
+  <th>累计下单</th><th>日均消耗(万)</th><th style="width:220px"></th></tr></thead>
+  <tbody><tr><td class="num">1</td><td class="nm">卫衣</td>
+      <td class="num">326</td><td class="num">77,401</td>
+      <td class="num strong">17.8</td>
+      <td class="barc"><div class="bar" style="width:100.0%"></div></td></tr><tr><td class="num">2</td><td class="nm">毛衣/针织衫</td>
+      <td class="num">341</td><td class="num">60,573</td>
+      <td class="num strong">17.7</td>
+      <td class="barc"><div class="bar" style="width:99.3%"></div></td></tr><tr><td class="num">3</td><td class="nm">夹克</td>
+      <td class="num">101</td><td class="num">48,237</td>
+      <td class="num strong">16.1</td>
+      <td class="barc"><div class="bar" style="width:90.7%"></div></td></tr><tr><td class="num">4</td><td class="nm">打底衫</td>
+      <td class="num">146</td><td class="num">77,201</td>
+      <td class="num strong">12.6</td>
+      <td class="barc"><div class="bar" style="width:70.8%"></div></td></tr><tr><td class="num">5</td><td class="nm">羊绒衫/羊毛衫</td>
+      <td class="num">229</td><td class="num">23,994</td>
+      <td class="num strong">11.1</td>
+      <td class="barc"><div class="bar" style="width:62.5%"></div></td></tr><tr><td class="num">6</td><td class="nm">保暖裤</td>
+      <td class="num">124</td><td class="num">45,984</td>
+      <td class="num strong">7.8</td>
+      <td class="barc"><div class="bar" style="width:44.0%"></div></td></tr><tr><td class="num">7</td><td class="nm">冲锋衣</td>
+      <td class="num">91</td><td class="num">33,818</td>
+      <td class="num strong">7.3</td>
+      <td class="barc"><div class="bar" style="width:41.1%"></div></td></tr><tr><td class="num">8</td><td class="nm">空</td>
+      <td class="num">653</td><td class="num">18,972</td>
+      <td class="num strong">7.0</td>
+      <td class="barc"><div class="bar" style="width:39.2%"></div></td></tr><tr><td class="num">9</td><td class="nm">连裤袜/打底袜</td>
+      <td class="num">51</td><td class="num">42,508</td>
+      <td class="num strong">6.8</td>
+      <td class="barc"><div class="bar" style="width:38.0%"></div></td></tr><tr><td class="num">10</td><td class="nm">0</td>
+      <td class="num">507</td><td class="num">17,159</td>
+      <td class="num strong">5.5</td>
+      <td class="barc"><div class="bar" style="width:31.2%"></div></td></tr><tr><td class="num">11</td><td class="nm">鲨鱼裤/打底裤</td>
+      <td class="num">42</td><td class="num">44,550</td>
+      <td class="num strong">5.5</td>
+      <td class="barc"><div class="bar" style="width:30.9%"></div></td></tr><tr><td class="num">12</td><td class="nm">塑身美体裤</td>
+      <td class="num">77</td><td class="num">27,067</td>
+      <td class="num strong">5.2</td>
+      <td class="barc"><div class="bar" style="width:29.2%"></div></td></tr><tr><td class="num">13</td><td class="nm">马甲</td>
+      <td class="num">143</td><td class="num">27,309</td>
+      <td class="num strong">5.0</td>
+      <td class="barc"><div class="bar" style="width:28.1%"></div></td></tr><tr><td class="num">14</td><td class="nm">西装裤/正装裤</td>
+      <td class="num">58</td><td class="num">20,320</td>
+      <td class="num strong">4.6</td>
+      <td class="barc"><div class="bar" style="width:25.6%"></div></td></tr><tr><td class="num">15</td><td class="nm">围巾/丝巾/披肩</td>
+      <td class="num">83</td><td class="num">20,297</td>
+      <td class="num strong">4.4</td>
+      <td class="barc"><div class="bar" style="width:24.9%"></div></td></tr><tr><td class="num">16</td><td class="nm">休闲套装</td>
+      <td class="num">167</td><td class="num">22,189</td>
+      <td class="num strong">3.9</td>
+      <td class="barc"><div class="bar" style="width:22.1%"></div></td></tr><tr><td class="num">17</td><td class="nm">睡衣套装/家居服套装</td>
+      <td class="num">153</td><td class="num">24,424</td>
+      <td class="num strong">3.9</td>
+      <td class="barc"><div class="bar" style="width:22.0%"></div></td></tr><tr><td class="num">18</td><td class="nm">中筒袜</td>
+      <td class="num">116</td><td class="num">30,793</td>
+      <td class="num strong">3.8</td>
+      <td class="barc"><div class="bar" style="width:21.6%"></div></td></tr><tr><td class="num">19</td><td class="nm">保暖套装</td>
+      <td class="num">115</td><td class="num">19,440</td>
+      <td class="num strong">3.7</td>
+      <td class="barc"><div class="bar" style="width:21.0%"></div></td></tr><tr><td class="num">20</td><td class="nm">短外套/中长款外套</td>
+      <td class="num">192</td><td class="num">12,552</td>
+      <td class="num strong">2.9</td>
+      <td class="barc"><div class="bar" style="width:16.1%"></div></td></tr></tbody></table>
+  </div>
+</section>
+
+<section>
+  <div class="sh"><span class="no">3</span><h2>气温趋势 × 应季品消耗对比</h2>
+    <span class="hint">气温节点来源：中央气象台 / 中国气象局 2026年9月公开通报</span></div>
+  <div class="card">
+    <svg viewBox="0 0 1240 440" class="chart"><defs>
+    <linearGradient id="gN" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#4fc3f7" stop-opacity=".30"/>
+      <stop offset="100%" stop-color="#4fc3f7" stop-opacity="0"/>
+    </linearGradient></defs><rect x="238.0" y="34" width="147.4" height="344" fill="#3ea6ff" opacity=".13" rx="3"/><text x="311.7" y="22" class="wv">第1轮冷空气</text><rect x="729.3" y="34" width="109.6" height="344" fill="#3ea6ff" opacity=".13" rx="3"/><text x="784.1" y="22" class="wv">第2轮冷空气</text><rect x="880.4" y="34" width="71.8" height="344" fill="#3ea6ff" opacity=".13" rx="3"/><text x="916.3" y="22" class="wv">第3轮冷空气</text><rect x="956.0" y="34" width="71.8" height="344" fill="#3ea6ff" opacity=".13" rx="3"/><text x="991.9" y="22" class="wv">第4轮冷空气</text><rect x="1145.0" y="34" width="34.0" height="344" fill="#3ea6ff" opacity=".13" rx="3"/><text x="1162.0" y="22" class="wv">第5轮冷空气</text><rect x="727.4" y="34" width="434.6" height="344" fill="#ffffff" opacity=".035"/><line x1="727.4" y1="34" x2="727.4" y2="378" stroke="#ff9e5e" stroke-width="1.6" stroke-dasharray="5 4"/><text x="735.4" y="50" class="note-sv">9/18 消耗数据截止</text><line x1="66" y1="361.6" x2="1162" y2="361.6" class="grid"/><text x="56" y="365.6" class="ax" text-anchor="end">14℃</text><line x1="66" y1="296.1" x2="1162" y2="296.1" class="grid"/><text x="56" y="300.1" class="ax" text-anchor="end">18℃</text><line x1="66" y1="230.6" x2="1162" y2="230.6" class="grid"/><text x="56" y="234.6" class="ax" text-anchor="end">22℃</text><line x1="66" y1="165.0" x2="1162" y2="165.0" class="grid"/><text x="56" y="169.0" class="ax" text-anchor="end">26℃</text><line x1="66" y1="99.5" x2="1162" y2="99.5" class="grid"/><text x="56" y="103.5" class="ax" text-anchor="end">30℃</text><line x1="66" y1="34.0" x2="1162" y2="34.0" class="grid"/><text x="56" y="38.0" class="ax" text-anchor="end">34℃</text><text x="66.0" y="400" class="ax" text-anchor="middle">1</text><text x="141.6" y="400" class="ax" text-anchor="middle">3</text><text x="217.2" y="400" class="ax" text-anchor="middle">5</text><text x="292.8" y="400" class="ax" text-anchor="middle">7</text><text x="368.3" y="400" class="ax" text-anchor="middle">9</text><text x="443.9" y="400" class="ax" text-anchor="middle">11</text><text x="519.5" y="400" class="ax" text-anchor="middle">13</text><text x="595.1" y="400" class="ax" text-anchor="middle">15</text><text x="670.7" y="400" class="ax" text-anchor="middle">17</text><text x="746.3" y="400" class="ax" text-anchor="middle">19</text><text x="821.9" y="400" class="ax" text-anchor="middle">21</text><text x="897.4" y="400" class="ax" text-anchor="middle">23</text><text x="973.0" y="400" class="ax" text-anchor="middle">25</text><text x="1048.6" y="400" class="ax" text-anchor="middle">27</text><text x="1124.2" y="400" class="ax" text-anchor="middle">29</text><text x="1162.0" y="400" class="ax" text-anchor="middle">30</text><text x="614.0" y="424" class="ax-t" text-anchor="middle">2026年9月（日）</text><polyline points="66.0,79.9 103.8,75.0 141.6,70.0 179.4,66.8 217.2,63.5 255.0,66.8 292.8,73.3 330.6,79.9 368.3,83.1 406.1,76.6 443.9,70.0 481.7,66.8 519.5,63.5 557.3,60.2 595.1,56.9 632.9,60.2 670.7,63.5 708.5,66.8 746.3,73.3 784.1,83.1 821.9,93.0 859.7,86.4 897.4,99.5 935.2,109.4 973.0,119.2 1010.8,129.0 1048.6,122.5 1086.4,115.9 1124.2,125.7 1162.0,145.4" fill="none" stroke="#ffb74d" stroke-width="2.6" stroke-linejoin="round"/><polygon points="66,378 66.0,140.5 103.8,135.6 141.6,129.0 179.4,132.3 217.2,145.4 255.0,188.0 292.8,224.0 330.6,247.0 368.3,260.1 406.1,238.8 443.9,217.5 481.7,204.4 519.5,194.5 557.3,188.0 595.1,197.8 632.9,207.6 670.7,201.1 708.5,194.5 746.3,237.1 784.1,273.2 821.9,283.0 859.7,260.1 897.4,289.5 935.2,302.6 973.0,312.5 1010.8,325.6 1048.6,305.9 1086.4,296.1 1124.2,309.2 1162.0,338.7 1162,378" fill="url(#gN)"/><polyline points="66.0,140.5 103.8,135.6 141.6,129.0 179.4,132.3 217.2,145.4 255.0,188.0 292.8,224.0 330.6,247.0 368.3,260.1 406.1,238.8 443.9,217.5 481.7,204.4 519.5,194.5 557.3,188.0 595.1,197.8 632.9,207.6 670.7,201.1 708.5,194.5 746.3,237.1 784.1,273.2 821.9,283.0 859.7,260.1 897.4,289.5 935.2,302.6 973.0,312.5 1010.8,325.6 1048.6,305.9 1086.4,296.1 1124.2,309.2 1162.0,338.7" fill="none" stroke="#4fc3f7" stroke-width="3" stroke-linejoin="round"/><circle cx="66.0" cy="140.5" r="2.8" fill="#4fc3f7"/><circle cx="103.8" cy="135.6" r="2.8" fill="#4fc3f7"/><circle cx="141.6" cy="129.0" r="2.8" fill="#4fc3f7"/><circle cx="179.4" cy="132.3" r="2.8" fill="#4fc3f7"/><circle cx="217.2" cy="145.4" r="2.8" fill="#4fc3f7"/><circle cx="255.0" cy="188.0" r="2.8" fill="#4fc3f7"/><circle cx="292.8" cy="224.0" r="2.8" fill="#4fc3f7"/><circle cx="330.6" cy="247.0" r="2.8" fill="#4fc3f7"/><circle cx="368.3" cy="260.1" r="2.8" fill="#4fc3f7"/><circle cx="406.1" cy="238.8" r="2.8" fill="#4fc3f7"/><circle cx="443.9" cy="217.5" r="2.8" fill="#4fc3f7"/><circle cx="481.7" cy="204.4" r="2.8" fill="#4fc3f7"/><circle cx="519.5" cy="194.5" r="2.8" fill="#4fc3f7"/><circle cx="557.3" cy="188.0" r="2.8" fill="#4fc3f7"/><circle cx="595.1" cy="197.8" r="2.8" fill="#4fc3f7"/><circle cx="632.9" cy="207.6" r="2.8" fill="#4fc3f7"/><circle cx="670.7" cy="201.1" r="2.8" fill="#4fc3f7"/><circle cx="708.5" cy="194.5" r="2.8" fill="#4fc3f7"/><circle cx="746.3" cy="237.1" r="2.8" fill="#4fc3f7"/><circle cx="784.1" cy="273.2" r="2.8" fill="#4fc3f7"/><circle cx="821.9" cy="283.0" r="2.8" fill="#4fc3f7"/><circle cx="859.7" cy="260.1" r="2.8" fill="#4fc3f7"/><circle cx="897.4" cy="289.5" r="2.8" fill="#4fc3f7"/><circle cx="935.2" cy="302.6" r="2.8" fill="#4fc3f7"/><circle cx="973.0" cy="312.5" r="2.8" fill="#4fc3f7"/><circle cx="1010.8" cy="325.6" r="2.8" fill="#4fc3f7"/><circle cx="1048.6" cy="305.9" r="2.8" fill="#4fc3f7"/><circle cx="1086.4" cy="296.1" r="2.8" fill="#4fc3f7"/><circle cx="1124.2" cy="309.2" r="2.8" fill="#4fc3f7"/><circle cx="1162.0" cy="338.7" r="2.8" fill="#4fc3f7"/><line x1="66" y1="137.2" x2="708.5" y2="137.2" stroke="#66e08f" stroke-width="2.8" stroke-dasharray="9 5"/><circle cx="708.5" cy="137.2" r="4.5" fill="#66e08f"/><text x="718.5" y="127.2" class="cost-lb">应季品日均消耗 182.5万元（9/1-9/18 均值）</text><text x="72" y="127.2" class="cost-lb2">在投 4,341 SPU｜起量 726</text></svg><div class="legend"><span><i style="background:#4fc3f7"></i>北方代表城市日均气温</span><span><i style="background:#ffb74d"></i>南方代表城市日均气温</span><span><i style="background:#66e08f"></i>应季品日均消耗（MTD均值）</span><span><i style="background:rgba(62,166,255,.4)"></i>冷空气过程</span></div>
+    <div class="grid-w"><div class="wc">
+      <div class="wt">第1轮冷空气<span class="wd">9/6-9</span></div>
+      <div class="wx">9/6起自西向东影响西北、华北、东北，多地气温创立秋后新低（中央气象台）</div></div><div class="wc">
+      <div class="wt">第2轮冷空气<span class="wd">9/19-21</span></div>
+      <div class="wx">9/19北方局地降温近20℃，黑龙江爱辉降幅达19℃（中国气象局）</div></div><div class="wc">
+      <div class="wt">第3轮冷空气<span class="wd">9/23-24</span></div>
+      <div class="wx">9月底前4次冷空气过程之一，影响西北、华北、东北</div></div><div class="wc">
+      <div class="wt">第4轮冷空气<span class="wd">9/25-26</span></div>
+      <div class="wx">强度逐渐增强，北方气温波动下行</div></div><div class="wc">
+      <div class="wt">第5轮冷空气<span class="wd">9/30</span></div>
+      <div class="wx">9/30前后，国庆前再度降温</div></div></div>
+    <p class="note"><b>降温节点解读：</b>9月呈"北方阶梯式降温、南方秋老虎持续"的南北分裂格局。
+    北方代表城市日均气温从月初 27-28℃ 降至下旬 15-19℃，累计降幅超 10℃；
+    <b>9/19 起至月底连续 4 轮冷空气</b>（19-21日、23-24日、25-26日、30日前后）强度逐渐增强，
+    是秋冬应季品需求释放的关键窗口；南方同期仅从 32℃ 缓降至 27℃ 左右，
+    秋冬品放量节奏应显著晚于北方，建议分区域差异化投放。</p>
+    <p class="note"><b>数据口径说明：</b>当前源表仅提供 9/1-9/18 的 <b>18 天平均值</b>（日均消耗、日均下单次数），
+    不含逐日明细，因此消耗侧只能以 MTD 日均基准线（绿色虚线 182.5 万元/天）呈现，
+    无法绘制真实逐日曲线。如需完整的"降温节点 → 消耗爬升"弹性验证，
+    需补充按日期维度拆分的逐日消耗数据（建议拉取 9/1-9/30 分日快照）。
+    气温曲线为基于上述公开通报的冷空气节点与南北格局还原的趋势示意，非逐日实测站点均值。</p>
+  </div>
+</section>
+
+<section>
+  <div class="sh"><span class="no">4</span><h2>拓品清单</h2>
+    <span class="hint">已验证的确定性货品，跨端 / 跨链路复制</span></div>
+  <div class="card">
+    <div class="sub-h">4.1 全域通反拓 ADQ — 全域通已起量、ADQ 未起量 TOP10</div>
+    <table class="t">
+  <thead><tr><th style="width:38px">#</th><th>商品名称</th><th>类目</th>
+  <th>全域通日均消耗(万)</th><th>全域通累计下单</th><th>ADQ日均消耗(万)</th>
+  <th>ADQ状态</th><th>SPU ID</th></tr></thead>
+  <tbody><tr>
+      <td class="num">1</td>
+      <td class="nm2" title="锦纶马甲">锦纶马甲</td>
+      <td class="tag2">其他</td>
+      <td class="num strong">0.6</td>
+      <td class="num">5,222</td>
+      <td class="num dim">0.0</td>
+      <td class="st">已投未起量（累计70单）</td>
+      <td class="spu">2730119097408807439</td>
+    </tr><tr>
+      <td class="num">2</td>
+      <td class="nm2" title="ACTLEEL男单层冲锋衣">ACTLEEL男单层冲锋衣</td>
+      <td class="tag2">运动户外</td>
+      <td class="num strong">0.6</td>
+      <td class="num">2,209</td>
+      <td class="num dim">0.0</td>
+      <td class="st">已投未起量（累计54单）</td>
+      <td class="spu">1918948552508229258</td>
+    </tr><tr>
+      <td class="num">3</td>
+      <td class="nm2" title="棉女春秋睡衣套装/家居服套装">棉女春秋睡衣套装/家居服套装</td>
+      <td class="tag2">内衣裤袜/睡衣/家居服</td>
+      <td class="num strong">0.4</td>
+      <td class="num">5,058</td>
+      <td class="num dim">0.1</td>
+      <td class="st">已投未起量（累计71单）</td>
+      <td class="spu">1811036697299507625</td>
+    </tr><tr>
+      <td class="num">4</td>
+      <td class="nm2" title="松山棉店保暖裤">松山棉店保暖裤</td>
+      <td class="tag2">内衣裤袜/睡衣/家居服</td>
+      <td class="num strong">0.4</td>
+      <td class="num">1,477</td>
+      <td class="num dim">0.0</td>
+      <td class="st">未投放</td>
+      <td class="spu">8727979053645231860</td>
+    </tr><tr>
+      <td class="num">5</td>
+      <td class="nm2" title="15分钟/15MINS短筒时装靴">15分钟/15MINS短筒时装靴</td>
+      <td class="tag2">女鞋</td>
+      <td class="num strong">0.4</td>
+      <td class="num">2,170</td>
+      <td class="num dim">0.0</td>
+      <td class="st">未投放</td>
+      <td class="spu">8548330916603256095</td>
+    </tr><tr>
+      <td class="num">6</td>
+      <td class="nm2" title="涤纶（聚酯纤维）开衫长袖连帽毛衣/针织衫">涤纶（聚酯纤维）开衫长袖连帽毛衣/针织衫</td>
+      <td class="tag2">男装</td>
+      <td class="num strong">0.3</td>
+      <td class="num">970</td>
+      <td class="num dim">0.0</td>
+      <td class="st">已投未起量（累计34单）</td>
+      <td class="spu">8217561084991186688</td>
+    </tr><tr>
+      <td class="num">7</td>
+      <td class="nm2" title="涤纶（聚酯纤维）长袖九分裤休闲套装">涤纶（聚酯纤维）长袖九分裤休闲套装</td>
+      <td class="tag2">女装</td>
+      <td class="num strong">0.3</td>
+      <td class="num">1,900</td>
+      <td class="num dim">0.0</td>
+      <td class="st">未投放</td>
+      <td class="spu">2441566159827459411</td>
+    </tr><tr>
+      <td class="num">8</td>
+      <td class="nm2" title="棉女夏季睡衣套装/家居服套装">棉女夏季睡衣套装/家居服套装</td>
+      <td class="tag2">内衣裤袜/睡衣/家居服</td>
+      <td class="num strong">0.3</td>
+      <td class="num">3,071</td>
+      <td class="num dim">0.0</td>
+      <td class="st">已投未起量（累计24单）</td>
+      <td class="spu">8749546737444507092</td>
+    </tr><tr>
+      <td class="num">9</td>
+      <td class="nm2" title="混合材质长袖女童打底衫">混合材质长袖女童打底衫</td>
+      <td class="tag2">其他</td>
+      <td class="num strong">0.3</td>
+      <td class="num">3,173</td>
+      <td class="num dim">0.0</td>
+      <td class="st">未投放</td>
+      <td class="spu">2261023861965871866</td>
+    </tr><tr>
+      <td class="num">10</td>
+      <td class="nm2" title="索盾棉男春秋睡衣套装/家居服套装">索盾棉男春秋睡衣套装/家居服套装</td>
+      <td class="tag2">内衣裤袜/睡衣/家居服</td>
+      <td class="num strong">0.3</td>
+      <td class="num">2,540</td>
+      <td class="num dim">0.0</td>
+      <td class="st">未投放</td>
+      <td class="spu">7716417982419175642</td>
+    </tr></tbody></table>
+    <p class="note">筛选逻辑：应季品中，在「是否全域通=true」侧累计下单 &gt; 110 次（已起量），
+    但在「是否全域通=false」侧累计下单 ≤ 110 次（未起量，含完全未投放），按全域通侧日均消耗降序取 TOP10。
+    这批商品已由全域通验证过转化能力，可直接在 ADQ 侧建计划复制。</p>
+
+    <div class="sub-h">4.2 CID 反拓小店直购 — CID 已起量、小店未起量 TOP10</div>
+    <table class="t">
+  <thead><tr><th style="width:38px">#</th><th>商品名称</th><th>类目</th>
+  <th>CID日均消耗(万)</th><th>CID累计下单</th><th>小店日均消耗(万)</th>
+  <th>小店状态</th><th>SPU ID</th></tr></thead>
+  <tbody><tr>
+      <td class="num">1</td>
+      <td class="nm2" title="开衫长袖毛衣/针织衫">开衫长袖毛衣/针织衫</td>
+      <td class="tag2">男装</td>
+      <td class="num strong">2.7</td>
+      <td class="num">2,561</td>
+      <td class="num dim">0.0</td>
+      <td class="st">已投未起量（累计3单）</td>
+      <td class="spu">7371653806931482073</td>
+    </tr><tr>
+      <td class="num">2</td>
+      <td class="nm2" title="棉长袖夹克">棉长袖夹克</td>
+      <td class="tag2">男装</td>
+      <td class="num strong">1.9</td>
+      <td class="num">2,423</td>
+      <td class="num dim">0.0</td>
+      <td class="st">已投未起量（累计68单）</td>
+      <td class="spu">2953216046028677144</td>
+    </tr><tr>
+      <td class="num">3</td>
+      <td class="nm2" title="套头长袖毛衣/针织衫">套头长袖毛衣/针织衫</td>
+      <td class="tag2">其他</td>
+      <td class="num strong">1.9</td>
+      <td class="num">8,040</td>
+      <td class="num dim">0.0</td>
+      <td class="st">未投放</td>
+      <td class="spu">8749765710640263255</td>
+    </tr><tr>
+      <td class="num">4</td>
+      <td class="nm2" title="套头长袖圆领毛衣/针织衫">套头长袖圆领毛衣/针织衫</td>
+      <td class="tag2">女装</td>
+      <td class="num strong">1.7</td>
+      <td class="num">3,659</td>
+      <td class="num dim">0.0</td>
+      <td class="st">已投未起量（累计10单）</td>
+      <td class="spu">2619786742566712506</td>
+    </tr><tr>
+      <td class="num">5</td>
+      <td class="nm2" title="长袖长裤男女通用健身套装/运动套装">长袖长裤男女通用健身套装/运动套装</td>
+      <td class="tag2">运动户外</td>
+      <td class="num strong">1.4</td>
+      <td class="num">1,442</td>
+      <td class="num dim">0.0</td>
+      <td class="st">已投未起量（累计5单）</td>
+      <td class="spu">8066060434577343009</td>
+    </tr><tr>
+      <td class="num">6</td>
+      <td class="nm2" title="棉开衫长袖毛衣/针织衫">棉开衫长袖毛衣/针织衫</td>
+      <td class="tag2">男装</td>
+      <td class="num strong">1.2</td>
+      <td class="num">824</td>
+      <td class="num dim">0.0</td>
+      <td class="st">未投放</td>
+      <td class="spu">8396437780322594466</td>
+    </tr><tr>
+      <td class="num">7</td>
+      <td class="nm2" title="套头长袖连帽毛衣/针织衫">套头长袖连帽毛衣/针织衫</td>
+      <td class="tag2">女装</td>
+      <td class="num strong">1.1</td>
+      <td class="num">4,627</td>
+      <td class="num dim">0.0</td>
+      <td class="st">未投放</td>
+      <td class="spu">8681610953159896207</td>
+    </tr><tr>
+      <td class="num">8</td>
+      <td class="nm2" title="涤纶（聚酯纤维）长袖V型领宽松短外套">涤纶（聚酯纤维）长袖V型领宽松短外套</td>
+      <td class="tag2">其他</td>
+      <td class="num strong">1.1</td>
+      <td class="num">673</td>
+      <td class="num dim">0.0</td>
+      <td class="st">未投放</td>
+      <td class="spu">4742102264319578017</td>
+    </tr><tr>
+      <td class="num">9</td>
+      <td class="nm2" title="棉套头长袖圆领卫衣">棉套头长袖圆领卫衣</td>
+      <td class="tag2">女装</td>
+      <td class="num strong">1.0</td>
+      <td class="num">6,162</td>
+      <td class="num dim">0.0</td>
+      <td class="st">已投未起量（累计9单）</td>
+      <td class="spu">4226803094728285274</td>
+    </tr><tr>
+      <td class="num">10</td>
+      <td class="nm2" title="护膝">护膝</td>
+      <td class="tag2">其他</td>
+      <td class="num strong">1.0</td>
+      <td class="num">8,643</td>
+      <td class="num dim">0.0</td>
+      <td class="st">已投未起量（累计12单）</td>
+      <td class="spu">7745517442749071843</td>
+    </tr></tbody></table>
+    <p class="note">筛选逻辑同上，源链路为 CID、目标链路为小店。CID 链路本身单 SPU 产出最高，
+    这批商品在 CID 已跑出规模，小店直购链路承接后可进一步放大自然流量与复购。</p>
+  </div>
+</section>
+
+<section>
+  <div class="sh"><span class="no">5</span><h2>抖音高 GMV 应季品覆盖</h2>
+    <span class="hint">抖音9月商品销售榜 TOP1000（销售额均 100w+）｜应季品 635/1,000 个</span></div>
+  <div class="card">
+    <div class="kpis">
+      <div class="k b2"><div class="kl">抖音榜单应季商品</div>
+        <div class="kv">635<span class="ku">个</span></div>
+        <div class="kx">按同一规则筛选｜占 TOP1000 的 63.5%</div></div>
+      <div class="k"><div class="kl">对标类目内部在投</div>
+        <div class="kv">2,954<span class="ku">个</span></div>
+        <div class="kx">SPU 去重</div></div>
+      <div class="k b3"><div class="kl">对标类目内部起量</div>
+        <div class="kv">528<span class="ku">个</span></div>
+        <div class="kx">起量率 17.9%｜爆量 31 个</div></div>
+      <div class="k hl"><div class="kl">对标类目日均消耗</div>
+        <div class="kv">138.0<span class="ku">万元</span></div>
+        <div class="kx">占应季品总消耗 75.6%</div></div>
+      <div class="k"><div class="kl">未覆盖类目数</div>
+        <div class="kv">1<span class="ku">个</span></div>
+        <div class="kx">抖音有高销、内部零在投</div></div>
+    </div>
+
+    <div class="sub-h">5.1 抖音应季热销商品 TOP20（分类目）</div>
+    <div class="tabs">
+      <div class="tab on" data-p="p1">女装 TOP20</div>
+      <div class="tab" data-p="p2">男装 TOP20</div>
+      <div class="tab" data-p="p3">内衣 TOP20</div>
+    </div>
+    <div class="pane on" id="p1"><div class="grid-g"><a class="gcard" href="https://haohuo.jinritemai.com/ecommerce/trade/detail/index.html?id=3838564149080752418&amp;origin_type=604" target="_blank">
+      <div class="rk">1</div>
+      <div class="ph"><img src="https://p9-aio.ecombdimg.com/img/ecom-shop-material/png_m_e93d80393b3cc4d4053de6d40d0d3953_sx_2103161_www1328-1328~tplv-dy-shrink:750:750.webp" loading="lazy" alt=""
+        onerror="this.parentNode.classList.add('noimg')"></div>
+      <div class="gi">
+        <div class="gn" title="胖mm大码早秋韩系气质条纹开衫高腰弯刀裤宽松显瘦休闲阔腿三件套">胖mm大码早秋韩系气质条纹开衫高腰弯刀裤宽松显瘦休闲阔腿三件套</div>
+        <div class="gm"><span class="vol">销量 10w+</span>
+          <span class="lv A">秋季过渡</span></div>
+        <div class="gs">时尚套装｜--</div>
+        <div class="gr">判定：秋季款式类目「时尚套装」</div>
+      </div></a><a class="gcard" href="https://haohuo.jinritemai.com/ecommerce/trade/detail/index.html?id=3808956916747599944&amp;origin_type=604" target="_blank">
+      <div class="rk">2</div>
+      <div class="ph"><img src="https://p9-aio.ecombdimg.com/img/ecom-shop-material/jpeg_m_c81013a29db79b67cb0cd1302937b6c4_sx_676254_www2000-2000~tplv-dy-shrink:750:750.webp" loading="lazy" alt=""
+        onerror="this.parentNode.classList.add('noimg')"></div>
+      <div class="gi">
+        <div class="gn" title="2026年春秋新款针织毛衣时尚百搭修身长袖上衣女气质百搭针织衫">2026年春秋新款针织毛衣时尚百搭修身长袖上衣女气质百搭针织衫</div>
+        <div class="gm"><span class="vol">销量 10w+</span>
+          <span class="lv S">核心秋冬</span></div>
+        <div class="gs">针织衫/毛衣/羊毛衫｜Hanchujiu/韩初玖</div>
+        <div class="gr">判定：核心秋冬类目「羊毛衫」</div>
+      </div></a><a class="gcard" href="https://haohuo.jinritemai.com/ecommerce/trade/detail/index.html?id=3833015682686124362&amp;origin_type=604" target="_blank">
+      <div class="rk">3</div>
+      <div class="ph"><img src="https://p3-aio.ecombdimg.com/obj/ecom-shop-material/png_m_1a02e18c55efc146aee560685d737197_sx_1204600_www1048-1048" loading="lazy" alt=""
+        onerror="this.parentNode.classList.add('noimg')"></div>
+      <div class="gi">
+        <div class="gn" title="(千千）【一号链接】E600-E700韩国专卖“분위기 좋은 장소”高级气质外套">(千千）【一号链接】E600-E700韩国专卖“분위기 좋은 장소”高级气质外套</div>
+        <div class="gm"><span class="vol">销量 10w+</span>
+          <span class="lv A">秋季过渡</span></div>
+        <div class="gs">其他外套｜--</div>
+        <div class="gr">判定：秋季款式类目「其他外套」</div>
+      </div></a><a class="gcard" href="https://haohuo.jinritemai.com/ecommerce/trade/detail/index.html?id=3839149078520922120&amp;origin_type=604" target="_blank">
+      <div class="rk">4</div>
+      <div class="ph"><img src="https://p3-aio.ecombdimg.com/img/ecom-shop-material/jpeg_m_1b275c11bc8e922702d0b29281c1f8da_sx_4277266_www3024-3024~tplv-dy-shrink:750:750.webp" loading="lazy" alt=""
+        onerror="this.parentNode.classList.add('noimg')"></div>
+      <div class="gi">
+        <div class="gn" title="2026大码遮肉显瘦针织打底衫女秋新款胖mm百搭宽松正肩上衣068">2026大码遮肉显瘦针织打底衫女秋新款胖mm百搭宽松正肩上衣068</div>
+        <div class="gm"><span class="vol">销量 10w+</span>
+          <span class="lv S">核心秋冬</span></div>
+        <div class="gs">针织衫/毛衣/羊毛衫｜--</div>
+        <div class="gr">判定：核心秋冬类目「羊毛衫」</div>
+      </div></a><a class="gcard" href="https://haohuo.jinritemai.com/ecommerce/trade/detail/index.html?id=3835955635204260115&amp;origin_type=604" target="_blank">
+      <div class="rk">5</div>
+      <div class="ph"><img src="https://p3-aio.ecombdimg.com/img/ecom-shop-material/jpeg_m_03c127e0152932f42fe92cd46504c8e5_sx_451497_www1440-1440~tplv-dy-shrink:750:750.webp" loading="lazy" alt=""
+        onerror="this.parentNode.classList.add('noimg')"></div>
+      <div class="gi">
+        <div class="gn" title="【云境风歌】秋季新款立领双排扣收腰短款气质显瘦风衣外">【云境风歌】秋季新款立领双排扣收腰短款气质显瘦风衣外</div>
+        <div class="gm"><span class="vol">销量 5w-10w</span>
+          <span class="lv A">秋季过渡</span></div>
+        <div class="gs">风衣｜--</div>
+        <div class="gr">判定：秋季款式类目「风衣」</div>
+      </div></a><a class="gcard" href="https://haohuo.jinritemai.com/ecommerce/trade/detail/index.html?id=3836544247461446129&amp;origin_type=604" target="_blank">
+      <div class="rk">6</div>
+      <div class="ph"><img src="https://p9-aio.ecombdimg.com/img/ecom-shop-material/jpeg_m_bdc9a6ce3fd73ad23f1c2de378f798ae_sx_460346_www800-800~tplv-dy-shrink:750:750.webp" loading="lazy" alt=""
+        onerror="this.parentNode.classList.add('noimg')"></div>
+      <div class="gi">
+        <div class="gn" title="UU&amp;MM品牌正版 高智千金感系带收腰短款风衣外套女小个子气质大衣">UU&amp;MM品牌正版 高智千金感系带收腰短款风衣外套女小个子气质大衣</div>
+        <div class="gm"><span class="vol">销量 5w-10w</span>
+          <span class="lv A">秋季过渡</span></div>
+        <div class="gs">风衣｜UU&amp;MM</div>
+        <div class="gr">判定：秋季款式类目「风衣」</div>
+      </div></a><a class="gcard" href="https://haohuo.jinritemai.com/ecommerce/trade/detail/index.html?id=3831100762927268136&amp;origin_type=604" target="_blank">
+      <div class="rk">7</div>
+      <div class="ph"><img src="https://p9-aio.ecombdimg.com/img/ecom-shop-material/jpeg_m_32387a78864969cad1e766773b705801_sx_328984_www800-800~tplv-dy-shrink:750:750.webp" loading="lazy" alt=""
+        onerror="this.parentNode.classList.add('noimg')"></div>
+      <div class="gi">
+        <div class="gn" title="ICHMODE【燕麦格雷】荔枝纹皮衣秋季三条杠撞色PU皮外套--运补6元">ICHMODE【燕麦格雷】荔枝纹皮衣秋季三条杠撞色PU皮外套--运补6元</div>
+        <div class="gm"><span class="vol">销量 5w-10w</span>
+          <span class="lv A">秋季过渡</span></div>
+        <div class="gs">夹克｜ICHMODE</div>
+        <div class="gr">判定：秋季款式类目「夹克」</div>
+      </div></a><a class="gcard" href="https://haohuo.jinritemai.com/ecommerce/trade/detail/index.html?id=3704926087046889962&amp;origin_type=604" target="_blank">
+      <div class="rk">8</div>
+      <div class="ph"><img src="https://p3-aio.ecombdimg.com/img/ecom-shop-material/jpeg_m_0970615037861c6b5550bd6001ad2f15_sx_616360_www1440-1440~tplv-dy-shrink:750:750.webp" loading="lazy" alt=""
+        onerror="this.parentNode.classList.add('noimg')"></div>
+      <div class="gi">
+        <div class="gn" title="马登美式巴恩风撞色翻领底特律工装夹克美高短外套上衣女燕麦格蕾">马登美式巴恩风撞色翻领底特律工装夹克美高短外套上衣女燕麦格蕾</div>
+        <div class="gm"><span class="vol">销量 5w-10w</span>
+          <span class="lv A">秋季过渡</span></div>
+        <div class="gs">其他外套｜Maden/马登</div>
+        <div class="gr">判定：秋季款式类目「其他外套」</div>
+      </div></a><a class="gcard" href="https://haohuo.jinritemai.com/ecommerce/trade/detail/index.html?id=3809609504765640798&amp;origin_type=604" target="_blank">
+      <div class="rk">9</div>
+      <div class="ph"><img src="https://p3-aio.ecombdimg.com/img/ecom-shop-material/jpeg_m_9300c63e0a1228b0fef33ff78b2a9174_sx_816846_www1200-1200~tplv-dy-shrink:750:750.webp" loading="lazy" alt=""
+        onerror="this.parentNode.classList.add('noimg')"></div>
+      <div class="gi">
+        <div class="gn" title="TUDJ2026年运动休闲宽松长袖开衫针织衫外搭透气休闲纯色百搭上衣">TUDJ2026年运动休闲宽松长袖开衫针织衫外搭透气休闲纯色百搭上衣</div>
+        <div class="gm"><span class="vol">销量 5w-10w</span>
+          <span class="lv S">核心秋冬</span></div>
+        <div class="gs">针织衫/毛衣/羊毛衫｜TUDJ</div>
+        <div class="gr">判定：核心秋冬类目「羊毛衫」</div>
+      </div></a><a class="gcard" href="https://haohuo.jinritemai.com/ecommerce/trade/detail/index.html?id=3838761700505551201&amp;origin_type=604" target="_blank">
+      <div class="rk">10</div>
+      <div class="ph"><img src="https://p26-item.ecombdimg.com/img/ecom-shop-material/jpeg_m_0bdd4658739f43d424a3d9e368308fa1_sx_459731_www2000-2000~tplv-5mmsx3fupr-re_cp:332:332:q100.jpeg" loading="lazy" alt=""
+        onerror="this.parentNode.classList.add('noimg')"></div>
+      <div class="gi">
+        <div class="gn" title="【L*sa同款】2026秋季新款莱赛尔棉风衣设计师短款外套小个子夹克">【L*sa同款】2026秋季新款莱赛尔棉风衣设计师短款外套小个子夹克</div>
+        <div class="gm"><span class="vol">销量 5w-10w</span>
+          <span class="lv A">秋季过渡</span></div>
+        <div class="gs">风衣｜--</div>
+        <div class="gr">判定：秋季款式类目「风衣」</div>
+      </div></a><a class="gcard" href="https://haohuo.jinritemai.com/ecommerce/trade/detail/index.html?id=3838656885964275880&amp;origin_type=604" target="_blank">
+      <div class="rk">11</div>
+      <div class="ph"><img src="https://p9-aio.ecombdimg.com/img/ecom-shop-material/jpeg_m_8e78b3bf30ca02d8e75c847841bbae72_sx_128314_www1280-1280~tplv-dy-shrink:750:750.webp" loading="lazy" alt=""
+        onerror="this.parentNode.classList.add('noimg')"></div>
+      <div class="gi">
+        <div class="gn" title="Lesacha澜石！防水小众设计感双拉链短款连帽宽松百搭外套 24236">Lesacha澜石！防水小众设计感双拉链短款连帽宽松百搭外套 24236</div>
+        <div class="gm"><span class="vol">销量 5w-10w</span>
+          <span class="lv A">秋季过渡</span></div>
+        <div class="gs">夹克｜--</div>
+        <div class="gr">判定：秋季款式类目「夹克」</div>
+      </div></a><a class="gcard" href="https://haohuo.jinritemai.com/ecommerce/trade/detail/index.html?id=3805762425140150412&amp;origin_type=604" target="_blank">
+      <div class="rk">12</div>
+      <div class="ph"><img src="https://p3-aio.ecombdimg.com/img/ecom-shop-material/jpeg_m_fddfe103ff19d6a5cefebe5b3196d647_sx_446532_www2000-2000~tplv-dy-shrink:750:750.webp" loading="lazy" alt=""
+        onerror="this.parentNode.classList.add('noimg')"></div>
+      <div class="gi">
+        <div class="gn" title="「软软糯糯 双面慕斯绒」休闲百搭拉链衫 春秋韩版显瘦卫衣帽衫T170">「软软糯糯 双面慕斯绒」休闲百搭拉链衫 春秋韩版显瘦卫衣帽衫T170</div>
+        <div class="gm"><span class="vol">销量 5w-10w</span>
+          <span class="lv A">秋季过渡</span></div>
+        <div class="gs">卫衣｜摩亦</div>
+        <div class="gr">判定：秋季款式类目「卫衣」</div>
+      </div></a><a class="gcard" href="https://haohuo.jinritemai.com/ecommerce/trade/detail/index.html?id=3840421299516211378&amp;origin_type=604" target="_blank">
+      <div class="rk">13</div>
+      <div class="ph"><img src="https://p26-item.ecombdimg.com/img/ecom-shop-material/png_m_c6747e3861cb54ccd32bc24694354840_sx_1102400_www1200-1200~tplv-5mmsx3fupr-re_cp:332:332:q100.jpeg" loading="lazy" alt=""
+        onerror="this.parentNode.classList.add('noimg')"></div>
+      <div class="gi">
+        <div class="gn" title="妞子家上衣服饰【中国制造合集】">妞子家上衣服饰【中国制造合集】</div>
+        <div class="gm"><span class="vol">销量 5w-10w</span>
+          <span class="lv S">核心秋冬</span></div>
+        <div class="gs">针织衫/毛衣/羊毛衫｜--</div>
+        <div class="gr">判定：核心秋冬类目「羊毛衫」</div>
+      </div></a><a class="gcard" href="https://haohuo.jinritemai.com/ecommerce/trade/detail/index.html?id=3835255652012392482&amp;origin_type=604" target="_blank">
+      <div class="rk">14</div>
+      <div class="ph"><img src="https://p3-aio.ecombdimg.com/img/ecom-shop-material/jpeg_m_d57ea2ffc4355f9cbb7c4c179a7ed084_sx_557937_www1440-1440~tplv-dy-shrink:750:750.webp" loading="lazy" alt=""
+        onerror="this.parentNode.classList.add('noimg')"></div>
+      <div class="gi">
+        <div class="gn" title="2026新款连帽夹克女收腰显瘦外套秋季短款户外软壳衣修身外套女">2026新款连帽夹克女收腰显瘦外套秋季短款户外软壳衣修身外套女</div>
+        <div class="gm"><span class="vol">销量 5w-10w</span>
+          <span class="lv A">秋季过渡</span></div>
+        <div class="gs">夹克｜--</div>
+        <div class="gr">判定：秋季款式类目「夹克」</div>
+      </div></a><a class="gcard" href="https://haohuo.jinritemai.com/ecommerce/trade/detail/index.html?id=3804331442918522925&amp;origin_type=604" target="_blank">
+      <div class="rk">15</div>
+      <div class="ph"><img src="https://p9-aio.ecombdimg.com/img/ecom-shop-material/png_m_410888f74ef75eb312d8031331b65a50_sx_624648_www600-600~tplv-dy-shrink:750:750.webp" loading="lazy" alt=""
+        onerror="this.parentNode.classList.add('noimg')"></div>
+      <div class="gi">
+        <div class="gn" title="2026新款白灰色修身卫衣外套女三季可穿大码运动健身休闲显瘦">2026新款白灰色修身卫衣外套女三季可穿大码运动健身休闲显瘦</div>
+        <div class="gm"><span class="vol">销量 5w-10w</span>
+          <span class="lv A">秋季过渡</span></div>
+        <div class="gs">卫衣｜--</div>
+        <div class="gr">判定：秋季款式类目「卫衣」</div>
+      </div></a><a class="gcard" href="https://haohuo.jinritemai.com/ecommerce/trade/detail/index.html?id=3839471546821378186&amp;origin_type=604" target="_blank">
+      <div class="rk">16</div>
+      <div class="ph"><img src="https://p9-aio.ecombdimg.com/img/ecom-shop-material/jpeg_m_2600e84d85c8a8d2b53ed5e54deb8d75_sx_754128_www3832-3832~tplv-dy-shrink:750:750.webp" loading="lazy" alt=""
+        onerror="this.parentNode.classList.add('noimg')"></div>
+      <div class="gi">
+        <div class="gn" title="【升级版2.0】立领高级感条纹拉链2026秋季新款简约洋气显瘦短外套">【升级版2.0】立领高级感条纹拉链2026秋季新款简约洋气显瘦短外套</div>
+        <div class="gm"><span class="vol">销量 5w-10w</span>
+          <span class="lv A">秋季过渡</span></div>
+        <div class="gs">其他外套｜--</div>
+        <div class="gr">判定：秋季款式类目「其他外套」</div>
+      </div></a><a class="gcard" href="https://haohuo.jinritemai.com/ecommerce/trade/detail/index.html?id=3839288308559642734&amp;origin_type=604" target="_blank">
+      <div class="rk">17</div>
+      <div class="ph"><img src="https://p3-aio.ecombdimg.com/img/ecom-shop-material/jpeg_m_be7c1f18d008c515dc9353fcdef78f4d_sx_1399798_www2048-2048~tplv-dy-shrink:750:750.webp" loading="lazy" alt=""
+        onerror="this.parentNode.classList.add('noimg')"></div>
+      <div class="gi">
+        <div class="gn" title="「直筒灯芯绒慵懒八分裤女2026秋季新款时尚百搭显瘦阔腿休闲裤」">「直筒灯芯绒慵懒八分裤女2026秋季新款时尚百搭显瘦阔腿休闲裤」</div>
+        <div class="gm"><span class="vol">销量 5w-10w</span>
+          <span class="lv S">核心秋冬</span></div>
+        <div class="gs">休闲裤｜--</div>
+        <div class="gr">判定：秋冬材质词「灯芯绒」</div>
+      </div></a><a class="gcard" href="https://haohuo.jinritemai.com/ecommerce/trade/detail/index.html?id=3835945073720295852&amp;origin_type=604" target="_blank">
+      <div class="rk">18</div>
+      <div class="ph"><img src="https://p9-aio.ecombdimg.com/img/ecom-shop-material/jpeg_m_daad79440ec062ea94009ec421f13467_sx_403542_www800-800~tplv-dy-shrink:750:750.webp" loading="lazy" alt=""
+        onerror="this.parentNode.classList.add('noimg')"></div>
+      <div class="gi">
+        <div class="gn" title="糯米西装裤女春秋季2026年新款高腰垂坠感直筒秋冬加绒休闲阔腿裤">糯米西装裤女春秋季2026年新款高腰垂坠感直筒秋冬加绒休闲阔腿裤</div>
+        <div class="gm"><span class="vol">销量 5w-10w</span>
+          <span class="lv S">核心秋冬</span></div>
+        <div class="gs">休闲裤｜韩曼惠</div>
+        <div class="gr">判定：秋冬材质词「加绒」</div>
+      </div></a><a class="gcard" href="https://haohuo.jinritemai.com/ecommerce/trade/detail/index.html?id=3835636409612501096&amp;origin_type=604" target="_blank">
+      <div class="rk">19</div>
+      <div class="ph"><img src="https://p9-aio.ecombdimg.com/img/ecom-shop-material/jpeg_m_ac7eddbac75e238fc750e5715adcc267_sx_594339_www1000-1000~tplv-dy-shrink:750:750.webp" loading="lazy" alt=""
+        onerror="this.parentNode.classList.add('noimg')"></div>
+      <div class="gi">
+        <div class="gn" title="小香风短款毛衣外套女针织开衫2026秋冬新款显瘦百搭长袖上衣外搭">小香风短款毛衣外套女针织开衫2026秋冬新款显瘦百搭长袖上衣外搭</div>
+        <div class="gm"><span class="vol">销量 5w-10w</span>
+          <span class="lv S">核心秋冬</span></div>
+        <div class="gs">针织衫/毛衣/羊毛衫｜--</div>
+        <div class="gr">判定：核心秋冬类目「羊毛衫」</div>
+      </div></a><a class="gcard" href="https://haohuo.jinritemai.com/ecommerce/trade/detail/index.html?id=3836176293360173512&amp;origin_type=604" target="_blank">
+      <div class="rk">20</div>
+      <div class="ph"><img src="https://p9-aio.ecombdimg.com/img/ecom-shop-material/png_m_88567e8d51bff70a6fe0f74c6a165d0d_sx_1148934_www968-968~tplv-dy-shrink:750:750.webp" loading="lazy" alt=""
+        onerror="this.parentNode.classList.add('noimg')"></div>
+      <div class="gi">
+        <div class="gn" title="2026秋冬新款宽松蝙蝠袖毛针织女秋冬软糯慵懒感百搭上衣">2026秋冬新款宽松蝙蝠袖毛针织女秋冬软糯慵懒感百搭上衣</div>
+        <div class="gm"><span class="vol">销量 5w-10w</span>
+          <span class="lv S">核心秋冬</span></div>
+        <div class="gs">针织衫/毛衣/羊毛衫｜--</div>
+        <div class="gr">判定：核心秋冬类目「羊毛衫」</div>
+      </div></a></div></div>
+    <div class="pane" id="p2"><div class="grid-g"><a class="gcard" href="https://haohuo.jinritemai.com/ecommerce/trade/detail/index.html?id=3695110920851292586&amp;origin_type=604" target="_blank">
+      <div class="rk">1</div>
+      <div class="ph"><img src="https://p9-aio.ecombdimg.com/img/ecom-shop-material/mGUmcELw_m_a38481a15e1eec5516cb042e16ddfe5c_sx_1421843_www790-790~tplv-dy-shrink:750:750.webp" loading="lazy" alt=""
+        onerror="this.parentNode.classList.add('noimg')"></div>
+      <div class="gi">
+        <div class="gn" title="lemanism【高智感】美式复古420g重磅纯色连帽卫衣秋冬衫情侣春秋">lemanism【高智感】美式复古420g重磅纯色连帽卫衣秋冬衫情侣春秋</div>
+        <div class="gm"><span class="vol">销量 10w+</span>
+          <span class="lv A">秋季过渡</span></div>
+        <div class="gs">卫衣｜lemanism</div>
+        <div class="gr">判定：秋季款式类目「卫衣」</div>
+      </div></a><a class="gcard" href="https://haohuo.jinritemai.com/ecommerce/trade/detail/index.html?id=3770671043564405299&amp;origin_type=604" target="_blank">
+      <div class="rk">2</div>
+      <div class="ph"><img src="https://p3-aio.ecombdimg.com/img/ecom-shop-material/jpeg_m_a59a1c7fdde26704446a6c1c76e94ec7_sx_421016_www800-800~tplv-dy-shrink:750:750.webp" loading="lazy" alt=""
+        onerror="this.parentNode.classList.add('noimg')"></div>
+      <div class="gi">
+        <div class="gn" title="VANCAMEL/西域骆驼三合一两件套冲锋外套男女户外登山服男女同款">VANCAMEL/西域骆驼三合一两件套冲锋外套男女户外登山服男女同款</div>
+        <div class="gm"><span class="vol">销量 10w+</span>
+          <span class="lv A">秋季过渡</span></div>
+        <div class="gs">其他外套｜VANCAMEL/西域骆驼</div>
+        <div class="gr">判定：秋季款式类目「其他外套」</div>
+      </div></a><a class="gcard" href="https://haohuo.jinritemai.com/ecommerce/trade/detail/index.html?id=3773640742900203621&amp;origin_type=604" target="_blank">
+      <div class="rk">3</div>
+      <div class="ph"><img src="https://p3-aio.ecombdimg.com/img/ecom-shop-material/jpeg_m_59b4673f45d7e4e5553ad3acd9310f5f_sx_450644_www1000-1000~tplv-dy-shrink:750:750.webp" loading="lazy" alt=""
+        onerror="this.parentNode.classList.add('noimg')"></div>
+      <div class="gi">
+        <div class="gn" title="MARK FAIRWHALE/马克华菲2026秋季新款宽松上衣时尚外套长裤套装">MARK FAIRWHALE/马克华菲2026秋季新款宽松上衣时尚外套长裤套装</div>
+        <div class="gm"><span class="vol">销量 5w-10w</span>
+          <span class="lv A">秋季过渡</span></div>
+        <div class="gs">时尚套装｜马克华菲都市</div>
+        <div class="gr">判定：秋季款式类目「时尚套装」</div>
+      </div></a><a class="gcard" href="https://haohuo.jinritemai.com/ecommerce/trade/detail/index.html?id=3841487926684942816&amp;origin_type=604" target="_blank">
+      <div class="rk">4</div>
+      <div class="ph"><img src="https://p26-item.ecombdimg.com/img/ecom-shop-material/jpeg_m_1dd7e000a0fe0f64b8272223edeab874_sx_376256_www800-800~tplv-5mmsx3fupr-re_cp:332:332:q100.jpeg" loading="lazy" alt=""
+        onerror="this.parentNode.classList.add('noimg')"></div>
+      <div class="gi">
+        <div class="gn" title="[假两件]navigare意大利小帆船双层领长袖针织衫男士时尚套头毛衣">[假两件]navigare意大利小帆船双层领长袖针织衫男士时尚套头毛衣</div>
+        <div class="gm"><span class="vol">销量 5w-10w</span>
+          <span class="lv S">核心秋冬</span></div>
+        <div class="gs">针织衫/毛衣/羊毛衫｜Navigare/纳维凯尔</div>
+        <div class="gr">判定：核心秋冬类目「羊毛衫」</div>
+      </div></a><a class="gcard" href="https://haohuo.jinritemai.com/ecommerce/trade/detail/index.html?id=3839310863639118294&amp;origin_type=604" target="_blank">
+      <div class="rk">5</div>
+      <div class="ph"><img src="https://p26-item.ecombdimg.com/img/ecom-shop-material/jpeg_m_35139418d3695f3064768807558cf26b_sx_1513387_www3000-3000~tplv-5mmsx3fupr-re_cp:332:332:q100.jpeg" loading="lazy" alt=""
+        onerror="this.parentNode.classList.add('noimg')"></div>
+      <div class="gi">
+        <div class="gn" title="捷尼拉莫明线撞色连帽开衫卫衣套装女 休闲松弛感阔腿卫裤外套男">捷尼拉莫明线撞色连帽开衫卫衣套装女 休闲松弛感阔腿卫裤外套男</div>
+        <div class="gm"><span class="vol">销量 5w-10w</span>
+          <span class="lv A">秋季过渡</span></div>
+        <div class="gs">时尚套装｜捷尼拉莫</div>
+        <div class="gr">判定：秋季款式类目「时尚套装」</div>
+      </div></a><a class="gcard" href="https://haohuo.jinritemai.com/ecommerce/trade/detail/index.html?id=3770840881519788221&amp;origin_type=604" target="_blank">
+      <div class="rk">6</div>
+      <div class="ph"><img src="https://p9-aio.ecombdimg.com/img/ecom-shop-material/jpeg_m_aec7ad282c95519588ed02abe07db17e_sx_333054_www800-800~tplv-dy-shrink:750:750.webp" loading="lazy" alt=""
+        onerror="this.parentNode.classList.add('noimg')"></div>
+      <div class="gi">
+        <div class="gn" title="花花公子新款男士夹克春秋爆款宽松外套男中年立领商务休闲夹克衫">花花公子新款男士夹克春秋爆款宽松外套男中年立领商务休闲夹克衫</div>
+        <div class="gm"><span class="vol">销量 5w-10w</span>
+          <span class="lv A">秋季过渡</span></div>
+        <div class="gs">夹克｜PLAYBOY/花花公子</div>
+        <div class="gr">判定：秋季款式类目「夹克」</div>
+      </div></a><a class="gcard" href="https://haohuo.jinritemai.com/ecommerce/trade/detail/index.html?id=3766361151198331111&amp;origin_type=604" target="_blank">
+      <div class="rk">7</div>
+      <div class="ph"><img src="https://p9-aio.ecombdimg.com/img/ecom-shop-material/jpeg_m_3dcf3ee94dabc34a147f3d025258f2f8_sx_176898_www750-750~tplv-dy-shrink:750:750.webp" loading="lazy" alt=""
+        onerror="this.parentNode.classList.add('noimg')"></div>
+      <div class="gi">
+        <div class="gn" title="INZC460G重磅拼色开衫卫衣男女同款连帽宽松休闲外套百搭情侣长袖">INZC460G重磅拼色开衫卫衣男女同款连帽宽松休闲外套百搭情侣长袖</div>
+        <div class="gm"><span class="vol">销量 5w-10w</span>
+          <span class="lv A">秋季过渡</span></div>
+        <div class="gs">卫衣｜INZC</div>
+        <div class="gr">判定：秋季款式类目「卫衣」</div>
+      </div></a><a class="gcard" href="https://haohuo.jinritemai.com/ecommerce/trade/detail/index.html?id=3805479653058150765&amp;origin_type=604" target="_blank">
+      <div class="rk">8</div>
+      <div class="ph"><img src="https://p3-aio.ecombdimg.com/img/ecom-shop-material/jpeg_m_096cdc0421a2f6c68fdf4e452d5b56e3_sx_3911518_www4032-4032~tplv-dy-shrink:750:750.webp" loading="lazy" alt=""
+        onerror="this.parentNode.classList.add('noimg')"></div>
+      <div class="gi">
+        <div class="gn" title="lemanism「黄金比例」美式短款开衫新款连帽卫衣潮流帽衫春秋百搭">lemanism「黄金比例」美式短款开衫新款连帽卫衣潮流帽衫春秋百搭</div>
+        <div class="gm"><span class="vol">销量 5w-10w</span>
+          <span class="lv A">秋季过渡</span></div>
+        <div class="gs">卫衣｜lemanism</div>
+        <div class="gr">判定：秋季款式类目「卫衣」</div>
+      </div></a><a class="gcard" href="https://haohuo.jinritemai.com/ecommerce/trade/detail/index.html?id=3533519581723381148&amp;origin_type=604" target="_blank">
+      <div class="rk">9</div>
+      <div class="ph"><img src="https://p9-aio.ecombdimg.com/img/ecom-shop-material/png_m_b93017741ad9d9b8e58d4df4eb987fb5_sx_808290_www800-800~tplv-dy-shrink:750:750.webp" loading="lazy" alt=""
+        onerror="this.parentNode.classList.add('noimg')"></div>
+      <div class="gi">
+        <div class="gn" title="【热卖70W单】迪卡侬MH100摇粒绒保暖衣男女秋冬徒步流光风312360">【热卖70W单】迪卡侬MH100摇粒绒保暖衣男女秋冬徒步流光风312360</div>
+        <div class="gm"><span class="vol">销量 5w-10w</span>
+          <span class="lv S">核心秋冬</span></div>
+        <div class="gs">抓绒衣｜Decathlon/迪卡侬</div>
+        <div class="gr">判定：秋冬材质词「摇粒绒」</div>
+      </div></a><a class="gcard" href="https://haohuo.jinritemai.com/ecommerce/trade/detail/index.html?id=3825010669112132431&amp;origin_type=604" target="_blank">
+      <div class="rk">10</div>
+      <div class="ph"><img src="https://p9-aio.ecombdimg.com/img/ecom-shop-material/png_m_a1e0db504f265e4502d90d2e0694e957_sx_925630_www800-800~tplv-dy-shrink:750:750.webp" loading="lazy" alt=""
+        onerror="this.parentNode.classList.add('noimg')"></div>
+      <div class="gi">
+        <div class="gn" title="茨行Eternal Will立体裁新款休闲运动情侣立体裁剪软壳夹克">茨行Eternal Will立体裁新款休闲运动情侣立体裁剪软壳夹克</div>
+        <div class="gm"><span class="vol">销量 5w-10w</span>
+          <span class="lv A">秋季过渡</span></div>
+        <div class="gs">夹克｜--</div>
+        <div class="gr">判定：秋季款式类目「夹克」</div>
+      </div></a><a class="gcard" href="https://haohuo.jinritemai.com/ecommerce/trade/detail/index.html?id=3838004255114002566&amp;origin_type=604" target="_blank">
+      <div class="rk">11</div>
+      <div class="ph"><img src="https://p3-aio.ecombdimg.com/img/ecom-shop-material/jpeg_m_2915357f8a2a6491826c4ab8389e1056_sx_73804_www800-800~tplv-dy-shrink:750:750.webp" loading="lazy" alt=""
+        onerror="this.parentNode.classList.add('noimg')"></div>
+      <div class="gi">
+        <div class="gn" title="V37秋季皮衣情侣款立领夹克外套防泼水宽松休闲百搭">V37秋季皮衣情侣款立领夹克外套防泼水宽松休闲百搭</div>
+        <div class="gm"><span class="vol">销量 5w-10w</span>
+          <span class="lv A">秋季过渡</span></div>
+        <div class="gs">夹克｜V37</div>
+        <div class="gr">判定：秋季款式类目「夹克」</div>
+      </div></a><a class="gcard" href="https://haohuo.jinritemai.com/ecommerce/trade/detail/index.html?id=3836860103718469656&amp;origin_type=604" target="_blank">
+      <div class="rk">12</div>
+      <div class="ph"><img src="https://p9-aio.ecombdimg.com/img/ecom-shop-material/jpeg_m_c9dfa6d8255d5e8281a739afa66b973e_sx_313099_www800-800~tplv-dy-shrink:750:750.webp" loading="lazy" alt=""
+        onerror="this.parentNode.classList.add('noimg')"></div>
+      <div class="gi">
+        <div class="gn" title="【宋亚东同款】霞湖世家 无氟户外软壳夹克防水耐磨可拆卸帽外套563">【宋亚东同款】霞湖世家 无氟户外软壳夹克防水耐磨可拆卸帽外套563</div>
+        <div class="gm"><span class="vol">销量 2.5w-5w</span>
+          <span class="lv A">秋季过渡</span></div>
+        <div class="gs">夹克｜霞湖世家/ROYAL FAMILY</div>
+        <div class="gr">判定：秋季款式类目「夹克」</div>
+      </div></a><a class="gcard" href="https://haohuo.jinritemai.com/ecommerce/trade/detail/index.html?id=3811246696747368802&amp;origin_type=604" target="_blank">
+      <div class="rk">13</div>
+      <div class="ph"><img src="https://p9-aio.ecombdimg.com/img/ecom-shop-material/jpeg_m_b61720ac43a2810f47f2a64f9c32a128_sx_461529_www800-800~tplv-dy-shrink:750:750.webp" loading="lazy" alt=""
+        onerror="this.parentNode.classList.add('noimg')"></div>
+      <div class="gi">
+        <div class="gn" title="YAYA/鸭鸭【轻壳系列】2026年新款情侣款宽松显瘦百搭外套羽绒服">YAYA/鸭鸭【轻壳系列】2026年新款情侣款宽松显瘦百搭外套羽绒服</div>
+        <div class="gm"><span class="vol">销量 2.5w-5w</span>
+          <span class="lv S">核心秋冬</span></div>
+        <div class="gs">羽绒服｜YAYA/鸭鸭</div>
+        <div class="gr">判定：秋冬材质词「羽绒」</div>
+      </div></a><a class="gcard" href="https://haohuo.jinritemai.com/ecommerce/trade/detail/index.html?id=3833369265818435760&amp;origin_type=604" target="_blank">
+      <div class="rk">14</div>
+      <div class="ph"><img src="https://p3-aio.ecombdimg.com/img/ecom-shop-material/jpeg_m_b4f65c3d8e541d03bf1557940b100ef4_sx_216364_www1080-1080~tplv-dy-shrink:750:750.webp" loading="lazy" alt=""
+        onerror="this.parentNode.classList.add('noimg')"></div>
+      <div class="gi">
+        <div class="gn" title="STK SmallTownKid满天星连帽开衫卫衣拉链衫轻亚潮潮牌烫钻外套">STK SmallTownKid满天星连帽开衫卫衣拉链衫轻亚潮潮牌烫钻外套</div>
+        <div class="gm"><span class="vol">销量 2.5w-5w</span>
+          <span class="lv A">秋季过渡</span></div>
+        <div class="gs">卫衣｜STK Small Town Kid</div>
+        <div class="gr">判定：秋季款式类目「卫衣」</div>
+      </div></a><a class="gcard" href="https://haohuo.jinritemai.com/ecommerce/trade/detail/index.html?id=3766378947395321931&amp;origin_type=604" target="_blank">
+      <div class="rk">15</div>
+      <div class="ph"><img src="https://p3-aio.ecombdimg.com/obj/ecom-shop-material/jpeg_m_ca7b6457fe08e3413d744fea48fe907e_sx_127958_www800-800" loading="lazy" alt=""
+        onerror="this.parentNode.classList.add('noimg')"></div>
+      <div class="gi">
+        <div class="gn" title="【龙牙抓绒衣】三代幻刃轻量抓绒外套男户外保暖内胆抓绒衣秋冬男款">【龙牙抓绒衣】三代幻刃轻量抓绒外套男户外保暖内胆抓绒衣秋冬男款</div>
+        <div class="gm"><span class="vol">销量 2.5w-5w</span>
+          <span class="lv S">核心秋冬</span></div>
+        <div class="gs">抓绒衣｜Dragon Tooth/龙牙</div>
+        <div class="gr">判定：秋冬材质词「抓绒」</div>
+      </div></a><a class="gcard" href="https://haohuo.jinritemai.com/ecommerce/trade/detail/index.html?id=3808881361830412832&amp;origin_type=604" target="_blank">
+      <div class="rk">16</div>
+      <div class="ph"><img src="https://p3-item.ecombdimg.com/img/ecom-shop-material/png_m_6cc5a8093084624f63804246646a0724_sx_3017740_www1440-1440~tplv-5mmsx3fupr-re_cp:332:332:q100.jpeg" loading="lazy" alt=""
+        onerror="this.parentNode.classList.add('noimg')"></div>
+      <div class="gi">
+        <div class="gn" title="YAYA/鸭鸭王一博同款【轻壳系列】26年春季显瘦百搭宽松羽绒服外套">YAYA/鸭鸭王一博同款【轻壳系列】26年春季显瘦百搭宽松羽绒服外套</div>
+        <div class="gm"><span class="vol">销量 2.5w-5w</span>
+          <span class="lv S">核心秋冬</span></div>
+        <div class="gs">羽绒服｜YAYA/鸭鸭</div>
+        <div class="gr">判定：秋冬材质词「羽绒」</div>
+      </div></a><a class="gcard" href="https://haohuo.jinritemai.com/ecommerce/trade/detail/index.html?id=3739666655979110771&amp;origin_type=604" target="_blank">
+      <div class="rk">17</div>
+      <div class="ph"><img src="https://p3-aio.ecombdimg.com/img/ecom-shop-material/jpeg_m_df80e0c76e65a93f7b9225ac40636ae2_sx_2643213_www2523-2523~tplv-dy-shrink:750:750.webp" loading="lazy" alt=""
+        onerror="this.parentNode.classList.add('noimg')"></div>
+      <div class="gi">
+        <div class="gn" title="【送打底 现货当天发】春秋扎染PU皮美式复古立领皮衣夹克外套">【送打底 现货当天发】春秋扎染PU皮美式复古立领皮衣夹克外套</div>
+        <div class="gm"><span class="vol">销量 2.5w-5w</span>
+          <span class="lv A">秋季过渡</span></div>
+        <div class="gs">夹克｜--</div>
+        <div class="gr">判定：秋季款式类目「夹克」</div>
+      </div></a><a class="gcard" href="https://haohuo.jinritemai.com/ecommerce/trade/detail/index.html?id=3834064952012964216&amp;origin_type=604" target="_blank">
+      <div class="rk">18</div>
+      <div class="ph"><img src="https://p9-aio.ecombdimg.com/img/ecom-shop-material/jpeg_m_c3353d295cf451cbd55a6de7ef429fa5_sx_175943_www800-800~tplv-dy-shrink:750:750.webp" loading="lazy" alt=""
+        onerror="this.parentNode.classList.add('noimg')"></div>
+      <div class="gi">
+        <div class="gn" title="YAYA/鸭鸭【新山系系列】90绒保暖户外新款冬季羽绒服YE4B017197P">YAYA/鸭鸭【新山系系列】90绒保暖户外新款冬季羽绒服YE4B017197P</div>
+        <div class="gm"><span class="vol">销量 2.5w-5w</span>
+          <span class="lv S">核心秋冬</span></div>
+        <div class="gs">羽绒服｜YAYA/鸭鸭</div>
+        <div class="gr">判定：秋冬材质词「羽绒」</div>
+      </div></a><a class="gcard" href="https://haohuo.jinritemai.com/ecommerce/trade/detail/index.html?id=3837832688375562687&amp;origin_type=604" target="_blank">
+      <div class="rk">19</div>
+      <div class="ph"><img src="https://p3-aio.ecombdimg.com/img/ecom-shop-material/jpeg_m_0fee79f55dfa376bbb5c0ce490191887_sx_352553_www800-800~tplv-dy-shrink:750:750.webp" loading="lazy" alt=""
+        onerror="this.parentNode.classList.add('noimg')"></div>
+      <div class="gi">
+        <div class="gn" title="卡丹路秋季男士长袖保暖针织衫休闲百搭纯色宽松V领假两件">卡丹路秋季男士长袖保暖针织衫休闲百搭纯色宽松V领假两件</div>
+        <div class="gm"><span class="vol">销量 2.5w-5w</span>
+          <span class="lv S">核心秋冬</span></div>
+        <div class="gs">针织衫/毛衣/羊毛衫｜Cardanro/卡丹路</div>
+        <div class="gr">判定：秋冬材质词「保暖」</div>
+      </div></a><a class="gcard" href="https://haohuo.jinritemai.com/ecommerce/trade/detail/index.html?id=3836677876887978243&amp;origin_type=604" target="_blank">
+      <div class="rk">20</div>
+      <div class="ph"><img src="https://p9-aio.ecombdimg.com/img/ecom-shop-material/jpeg_m_119d4fe9a08e30266cc301ac1350b016_sx_683297_www1800-1800~tplv-dy-shrink:750:750.webp" loading="lazy" alt=""
+        onerror="this.parentNode.classList.add('noimg')"></div>
+      <div class="gi">
+        <div class="gn" title="HUMBLE STONE悍石 城市户外轻量可收纳肌理立领休闲外套 26092">HUMBLE STONE悍石 城市户外轻量可收纳肌理立领休闲外套 26092</div>
+        <div class="gm"><span class="vol">销量 2.5w-5w</span>
+          <span class="lv A">秋季过渡</span></div>
+        <div class="gs">夹克｜悍石</div>
+        <div class="gr">判定：秋季款式类目「夹克」</div>
+      </div></a></div></div>
+    <div class="pane" id="p3"><div class="grid-g"><a class="gcard" href="https://haohuo.jinritemai.com/ecommerce/trade/detail/index.html?id=3840409151142494468&amp;origin_type=604" target="_blank">
+      <div class="rk">1</div>
+      <div class="ph"><img src="https://p3-item.ecombdimg.com/img/ecom-shop-material/png_m_e78bcc1d5d385daca44f980e5afc6cf1_sx_2119506_www1440-1440~tplv-5mmsx3fupr-re_cp:332:332:q100.jpeg" loading="lazy" alt=""
+        onerror="this.parentNode.classList.add('noimg')"></div>
+      <div class="gi">
+        <div class="gn" title="【舒适透气又有效】百搭洋气时尚可外穿可内搭打底衣zb">【舒适透气又有效】百搭洋气时尚可外穿可内搭打底衣zb</div>
+        <div class="gm"><span class="vol">销量 10w+</span>
+          <span class="lv A">秋季过渡</span></div>
+        <div class="gs">带胸垫打底衣｜Kola Kola</div>
+        <div class="gr">判定：秋季款式类目「带胸垫打底衣」</div>
+      </div></a><a class="gcard" href="https://haohuo.jinritemai.com/ecommerce/trade/detail/index.html?id=3757084479261376651&amp;origin_type=604" target="_blank">
+      <div class="rk">2</div>
+      <div class="ph"><img src="https://p3-aio.ecombdimg.com/img/ecom-shop-material/jpeg_m_1c3bc863575af4e901d005c13ba51544_sx_1278543_www1600-1600~tplv-dy-shrink:750:750.webp" loading="lazy" alt=""
+        onerror="this.parentNode.classList.add('noimg')"></div>
+      <div class="gi">
+        <div class="gn" title="梵客隆高腰收腹无痕隐形提臀塑形10A抗菌加长底裆透气内裤女569">梵客隆高腰收腹无痕隐形提臀塑形10A抗菌加长底裆透气内裤女569</div>
+        <div class="gm"><span class="vol">销量 10w+</span>
+          <span class="lv A">秋季过渡</span></div>
+        <div class="gs">塑身衣｜梵客隆</div>
+        <div class="gr">判定：秋季款式类目「塑身衣」</div>
+      </div></a><a class="gcard" href="https://haohuo.jinritemai.com/ecommerce/trade/detail/index.html?id=3839300750954070268&amp;origin_type=604" target="_blank">
+      <div class="rk">3</div>
+      <div class="ph"><img src="https://p3-item.ecombdimg.com/img/ecom-shop-material/jpeg_m_89f0d63357579baa49720aab5ab3ed87_sx_383986_www1179-1179~tplv-5mmsx3fupr-re_cp:332:332:q100.jpeg" loading="lazy" alt=""
+        onerror="this.parentNode.classList.add('noimg')"></div>
+      <div class="gi">
+        <div class="gn" title="【2件装 更划算】zb秋季高腰保暖打底连裤袜显瘦百搭0373">【2件装 更划算】zb秋季高腰保暖打底连裤袜显瘦百搭0373</div>
+        <div class="gm"><span class="vol">销量 10w+</span>
+          <span class="lv S">核心秋冬</span></div>
+        <div class="gs">连体袜｜Kola Kola</div>
+        <div class="gr">判定：秋冬材质词「保暖」</div>
+      </div></a><a class="gcard" href="https://haohuo.jinritemai.com/ecommerce/trade/detail/index.html?id=3635816362024290035&amp;origin_type=604" target="_blank">
+      <div class="rk">4</div>
+      <div class="ph"><img src="https://p9-aio.ecombdimg.com/img/ecom-shop-material/jpeg_m_70daaaaab3c4ed02833bfb6afc538a72_sx_323510_www800-800~tplv-dy-shrink:750:750.webp" loading="lazy" alt=""
+        onerror="this.parentNode.classList.add('noimg')"></div>
+      <div class="gi">
+        <div class="gn" title="舞青衣【明星同款】反重力5.0收腹提臀秋冬保暖显瘦塑身美体裤ZB">舞青衣【明星同款】反重力5.0收腹提臀秋冬保暖显瘦塑身美体裤ZB</div>
+        <div class="gm"><span class="vol">销量 10w+</span>
+          <span class="lv S">核心秋冬</span></div>
+        <div class="gs">塑身衣｜舞青衣</div>
+        <div class="gr">判定：秋冬材质词「保暖」</div>
+      </div></a><a class="gcard" href="https://haohuo.jinritemai.com/ecommerce/trade/detail/index.html?id=3767566110623399967&amp;origin_type=604" target="_blank">
+      <div class="rk">5</div>
+      <div class="ph"><img src="https://p3-aio.ecombdimg.com/img/ecom-shop-material/jpeg_m_07abaafaacc1bcaa416010d545d6f2dc_sx_383940_www800-800~tplv-dy-shrink:750:750.webp" loading="lazy" alt=""
+        onerror="this.parentNode.classList.add('noimg')"></div>
+      <div class="gi">
+        <div class="gn" title="草本初色【亲肤级】青少年保暖内衣莱赛尔&amp;醋纤吸湿排汗含山茶花油">草本初色【亲肤级】青少年保暖内衣莱赛尔&amp;醋纤吸湿排汗含山茶花油</div>
+        <div class="gm"><span class="vol">销量 10w+</span>
+          <span class="lv S">核心秋冬</span></div>
+        <div class="gs">保暖内衣｜草本初色优选</div>
+        <div class="gr">判定：秋冬材质词「保暖」</div>
+      </div></a><a class="gcard" href="https://haohuo.jinritemai.com/ecommerce/trade/detail/index.html?id=3835732962557690228&amp;origin_type=604" target="_blank">
+      <div class="rk">6</div>
+      <div class="ph"><img src="https://p9-aio.ecombdimg.com/img/ecom-shop-material/png_m_7192c6211e17d1cab58fa88fa03baa92_sx_836163_www800-800~tplv-dy-shrink:750:750.webp" loading="lazy" alt=""
+        onerror="this.parentNode.classList.add('noimg')"></div>
+      <div class="gi">
+        <div class="gn" title="马卡乐儿童秋衣秋裤2026新款秋冬女童保暖内衣套装中大童打底长袖">马卡乐儿童秋衣秋裤2026新款秋冬女童保暖内衣套装中大童打底长袖</div>
+        <div class="gm"><span class="vol">销量 10w+</span>
+          <span class="lv S">核心秋冬</span></div>
+        <div class="gs">居家服/睡衣｜MARCOLOR/马卡乐</div>
+        <div class="gr">判定：秋冬材质词「保暖」</div>
+      </div></a><a class="gcard" href="https://haohuo.jinritemai.com/ecommerce/trade/detail/index.html?id=3781793271454500181&amp;origin_type=604" target="_blank">
+      <div class="rk">7</div>
+      <div class="ph"><img src="https://p9-aio.ecombdimg.com/img/ecom-shop-material/png_m_a277d599a7ab87f2474cbd2199e89e67_sx_1319225_www1080-1080~tplv-dy-shrink:750:750.webp" loading="lazy" alt=""
+        onerror="this.parentNode.classList.add('noimg')"></div>
+      <div class="gi">
+        <div class="gn" title="【大码高腰打底裤】秋冬外穿内搭高弹连裤袜高腰款秋裤打底袜弹力">【大码高腰打底裤】秋冬外穿内搭高弹连裤袜高腰款秋裤打底袜弹力</div>
+        <div class="gm"><span class="vol">销量 10w+</span>
+          <span class="lv S">核心秋冬</span></div>
+        <div class="gs">长筒袜｜热荔</div>
+        <div class="gr">判定：核心秋冬类目「长筒袜」</div>
+      </div></a><a class="gcard" href="https://haohuo.jinritemai.com/ecommerce/trade/detail/index.html?id=3829803287759159633&amp;origin_type=604" target="_blank">
+      <div class="rk">8</div>
+      <div class="ph"><img src="https://p3-aio.ecombdimg.com/obj/ecom-shop-material/jpeg_m_00f74af4cdbf79b05e83f70ccfeb4111_sx_513141_www1532-1532" loading="lazy" alt=""
+        onerror="this.parentNode.classList.add('noimg')"></div>
+      <div class="gi">
+        <div class="gn" title="原美焦点高腰收腹无痕包臀女士内裤10A加长蚕丝底裆提臀燕麦格雷">原美焦点高腰收腹无痕包臀女士内裤10A加长蚕丝底裆提臀燕麦格雷</div>
+        <div class="gm"><span class="vol">销量 10w+</span>
+          <span class="lv A">秋季过渡</span></div>
+        <div class="gs">塑身衣｜原美焦点</div>
+        <div class="gr">判定：秋季款式类目「塑身衣」</div>
+      </div></a><a class="gcard" href="https://haohuo.jinritemai.com/ecommerce/trade/detail/index.html?id=3821914255247147267&amp;origin_type=604" target="_blank">
+      <div class="rk">9</div>
+      <div class="ph"><img src="https://p9-aio.ecombdimg.com/obj/ecom-shop-material/png_m_5ef6af4ff86c1250cffc370aff206492_sx_628368_www800-800" loading="lazy" alt=""
+        onerror="this.parentNode.classList.add('noimg')"></div>
+      <div class="gi">
+        <div class="gn" title="Ufeel【蜜桃臀】S1粉彩风高腰收腹无痕透气10A加长蚕丝底裆内裤2615">Ufeel【蜜桃臀】S1粉彩风高腰收腹无痕透气10A加长蚕丝底裆内裤2615</div>
+        <div class="gm"><span class="vol">销量 10w+</span>
+          <span class="lv A">秋季过渡</span></div>
+        <div class="gs">塑身衣｜Ufeel</div>
+        <div class="gr">判定：秋季款式类目「塑身衣」</div>
+      </div></a><a class="gcard" href="https://haohuo.jinritemai.com/ecommerce/trade/detail/index.html?id=3842155306679402865&amp;origin_type=604" target="_blank">
+      <div class="rk">10</div>
+      <div class="ph"><img src="https://p9-aio.ecombdimg.com/img/ecom-shop-material/png_m_e2d9cc075635403b17bdcf583cd621a3_sx_3583192_www2048-2048~tplv-resize:200:0.webp" loading="lazy" alt=""
+        onerror="this.parentNode.classList.add('noimg')"></div>
+      <div class="gi">
+        <div class="gn" title="【2件装 更划算】zb秋冬显瘦高腰保暖打底连裤袜舒适百搭0373">【2件装 更划算】zb秋冬显瘦高腰保暖打底连裤袜舒适百搭0373</div>
+        <div class="gm"><span class="vol">销量 10w+</span>
+          <span class="lv S">核心秋冬</span></div>
+        <div class="gs">连体袜｜Kola Kola</div>
+        <div class="gr">判定：秋冬材质词「保暖」</div>
+      </div></a><a class="gcard" href="https://haohuo.jinritemai.com/ecommerce/trade/detail/index.html?id=3797516590359118157&amp;origin_type=604" target="_blank">
+      <div class="rk">11</div>
+      <div class="ph"><img src="https://p3-aio.ecombdimg.com/img/ecom-shop-material/jpeg_m_71486f8e09c7aacc536b46f34cf21690_sx_265965_www1280-1280~tplv-dy-shrink:750:750.webp" loading="lazy" alt=""
+        onerror="this.parentNode.classList.add('noimg')"></div>
+      <div class="gi">
+        <div class="gn" title="xiaoyujiadao/小鱼驾到【抗菌袜】四季棉袜男女短中筒棉袜">xiaoyujiadao/小鱼驾到【抗菌袜】四季棉袜男女短中筒棉袜</div>
+        <div class="gm"><span class="vol">销量 10w+</span>
+          <span class="lv A">秋季过渡</span></div>
+        <div class="gs">中筒袜｜xiaoyujiadao/小鱼驾到</div>
+        <div class="gr">判定：秋季款式类目「中筒袜」</div>
+      </div></a><a class="gcard" href="https://haohuo.jinritemai.com/ecommerce/trade/detail/index.html?id=3833002780738584641&amp;origin_type=604" target="_blank">
+      <div class="rk">12</div>
+      <div class="ph"><img src="https://p9-aio.ecombdimg.com/obj/ecom-shop-material/jpeg_m_7ef0497499e22b38e141424bee702511_sx_492976_www800-800" loading="lazy" alt=""
+        onerror="this.parentNode.classList.add('noimg')"></div>
+      <div class="gi">
+        <div class="gn" title="原美焦点高腰收腹无痕提臀网纱女士内裤10A桑蚕丝秋冬燕麦格雷">原美焦点高腰收腹无痕提臀网纱女士内裤10A桑蚕丝秋冬燕麦格雷</div>
+        <div class="gm"><span class="vol">销量 10w+</span>
+          <span class="lv A">秋季过渡</span></div>
+        <div class="gs">塑身衣｜原美焦点</div>
+        <div class="gr">判定：秋季款式类目「塑身衣」</div>
+      </div></a><a class="gcard" href="https://haohuo.jinritemai.com/ecommerce/trade/detail/index.html?id=3840438051952263357&amp;origin_type=604" target="_blank">
+      <div class="rk">13</div>
+      <div class="ph"><img src="https://p9-aio.ecombdimg.com/img/ecom-shop-material/jpeg_m_ea159d945403c48b02b7b309f360e625_sx_195923_www800-800~tplv-resize:200:0.webp" loading="lazy" alt=""
+        onerror="this.parentNode.classList.add('noimg')"></div>
+      <div class="gi">
+        <div class="gn" title="草本初色高腰内裤女透气抗菌微压收腹收小肚子性感国风桑蚕丝内裤">草本初色高腰内裤女透气抗菌微压收腹收小肚子性感国风桑蚕丝内裤</div>
+        <div class="gm"><span class="vol">销量 5w-10w</span>
+          <span class="lv A">秋季过渡</span></div>
+        <div class="gs">塑身衣｜草本初色优选</div>
+        <div class="gr">判定：秋季款式类目「塑身衣」</div>
+      </div></a><a class="gcard" href="https://haohuo.jinritemai.com/ecommerce/trade/detail/index.html?id=3776896248435573071&amp;origin_type=604" target="_blank">
+      <div class="rk">14</div>
+      <div class="ph"><img src="https://p3-aio.ecombdimg.com/img/ecom-shop-material/png_m_2c1d4f652875d003182f90be46267384_sx_955383_www800-800~tplv-dy-shrink:750:750.webp" loading="lazy" alt=""
+        onerror="this.parentNode.classList.add('noimg')"></div>
+      <div class="gi">
+        <div class="gn" title="【买1送1】新升级小立领0聚酯打底衫修身显瘦百搭气质高级感8866zb">【买1送1】新升级小立领0聚酯打底衫修身显瘦百搭气质高级感8866zb</div>
+        <div class="gm"><span class="vol">销量 5w-10w</span>
+          <span class="lv S">核心秋冬</span></div>
+        <div class="gs">保暖内衣｜Kola Kola</div>
+        <div class="gr">判定：核心秋冬类目「保暖内衣」</div>
+      </div></a><a class="gcard" href="https://haohuo.jinritemai.com/ecommerce/trade/detail/index.html?id=3839267263345722044&amp;origin_type=604" target="_blank">
+      <div class="rk">15</div>
+      <div class="ph"><img src="https://p3-aio.ecombdimg.com/obj/ecom-shop-material/jpeg_m_e47d7c096801a2e5c2f4e847d4dd141a_sx_575859_www1600-1600" loading="lazy" alt=""
+        onerror="this.parentNode.classList.add('noimg')"></div>
+      <div class="gi">
+        <div class="gn" title="【草本初色穿搭领打底衫】长袖10A抗菌防静电修身百搭内搭上衣">【草本初色穿搭领打底衫】长袖10A抗菌防静电修身百搭内搭上衣</div>
+        <div class="gm"><span class="vol">销量 5w-10w</span>
+          <span class="lv S">核心秋冬</span></div>
+        <div class="gs">保暖内衣｜草本初色</div>
+        <div class="gr">判定：核心秋冬类目「保暖内衣」</div>
+      </div></a><a class="gcard" href="https://haohuo.jinritemai.com/ecommerce/trade/detail/index.html?id=3768630955489756011&amp;origin_type=604" target="_blank">
+      <div class="rk">16</div>
+      <div class="ph"><img src="https://p3-aio.ecombdimg.com/img/ecom-shop-material/jpeg_m_94f0be7a4e3d6a80cbb0c7186ba9c171_sx_261645_www1440-1440~tplv-dy-shrink:750:750.webp" loading="lazy" alt=""
+        onerror="this.parentNode.classList.add('noimg')"></div>
+      <div class="gi">
+        <div class="gn" title="【刘涛推荐】贝肽斯[胎脂皮]儿童秋衣裤套装加厚高腰保暖内衣睡衣">【刘涛推荐】贝肽斯[胎脂皮]儿童秋衣裤套装加厚高腰保暖内衣睡衣</div>
+        <div class="gm"><span class="vol">销量 5w-10w</span>
+          <span class="lv S">核心秋冬</span></div>
+        <div class="gs">儿童内衣裤｜贝肽斯</div>
+        <div class="gr">判定：秋冬材质词「加厚」</div>
+      </div></a><a class="gcard" href="https://haohuo.jinritemai.com/ecommerce/trade/detail/index.html?id=3766966273351745725&amp;origin_type=604" target="_blank">
+      <div class="rk">17</div>
+      <div class="ph"><img src="https://p3-aio.ecombdimg.com/img/ecom-shop-material/jpeg_m_15ce32e3214af453152e23593eecae7b_sx_524137_www1600-1600~tplv-dy-shrink:750:750.webp" loading="lazy" alt=""
+        onerror="this.parentNode.classList.add('noimg')"></div>
+      <div class="gi">
+        <div class="gn" title="【草本初色美肤衣】山茶花油香氛发热保暖隐形美形肌底衣秋冬女套装">【草本初色美肤衣】山茶花油香氛发热保暖隐形美形肌底衣秋冬女套装</div>
+        <div class="gm"><span class="vol">销量 5w-10w</span>
+          <span class="lv S">核心秋冬</span></div>
+        <div class="gs">塑身衣｜草本初色</div>
+        <div class="gr">判定：秋冬材质词「保暖」</div>
+      </div></a><a class="gcard" href="https://haohuo.jinritemai.com/ecommerce/trade/detail/index.html?id=3766952256776306969&amp;origin_type=604" target="_blank">
+      <div class="rk">18</div>
+      <div class="ph"><img src="https://p9-aio.ecombdimg.com/img/ecom-shop-material/jpeg_m_6620d1e031e64fc13e730934bd29f1db_sx_503765_www1600-1600~tplv-dy-shrink:750:750.webp" loading="lazy" alt=""
+        onerror="this.parentNode.classList.add('noimg')"></div>
+      <div class="gi">
+        <div class="gn" title="【杨紫同款】草本初色修容塑型热能衣打底秋冬保暖微压修身显瘦百搭">【杨紫同款】草本初色修容塑型热能衣打底秋冬保暖微压修身显瘦百搭</div>
+        <div class="gm"><span class="vol">销量 5w-10w</span>
+          <span class="lv S">核心秋冬</span></div>
+        <div class="gs">塑身衣｜草本初色</div>
+        <div class="gr">判定：秋冬材质词「保暖」</div>
+      </div></a><a class="gcard" href="https://haohuo.jinritemai.com/ecommerce/trade/detail/index.html?id=3687706261991850140&amp;origin_type=604" target="_blank">
+      <div class="rk">19</div>
+      <div class="ph"><img src="https://p3-aio.ecombdimg.com/img/ecom-shop-material/jpeg_m_50bcb43fe5b10e6654ea98036a782f2a_sx_294262_www800-800~tplv-dy-shrink:750:750.webp" loading="lazy" alt=""
+        onerror="this.parentNode.classList.add('noimg')"></div>
+      <div class="gi">
+        <div class="gn" title="雪中飞流光风10A抗菌男士秋冬防寒中高腰无痕打底厚秋裤#双11好物">雪中飞流光风10A抗菌男士秋冬防寒中高腰无痕打底厚秋裤#双11好物</div>
+        <div class="gm"><span class="vol">销量 5w-10w</span>
+          <span class="lv S">核心秋冬</span></div>
+        <div class="gs">保暖内衣｜ SNOW FLYING/雪中飞</div>
+        <div class="gr">判定：秋冬材质词「防寒」</div>
+      </div></a><a class="gcard" href="https://haohuo.jinritemai.com/ecommerce/trade/detail/index.html?id=3772918509621871008&amp;origin_type=604" target="_blank">
+      <div class="rk">20</div>
+      <div class="ph"><img src="https://p3-aio.ecombdimg.com/img/ecom-shop-material/png_m_82cdea56987d46b104af2df5dadc54a9_sx_2416950_www1500-1500~tplv-dy-shrink:750:750.webp" loading="lazy" alt=""
+        onerror="this.parentNode.classList.add('noimg')"></div>
+      <div class="gi">
+        <div class="gn" title="YAYA/鸭鸭【太空舱底裆】10A抗菌抗螨桑蚕丝莱赛尔高弹秋冬男保暖裤">YAYA/鸭鸭【太空舱底裆】10A抗菌抗螨桑蚕丝莱赛尔高弹秋冬男保暖裤</div>
+        <div class="gm"><span class="vol">销量 5w-10w</span>
+          <span class="lv S">核心秋冬</span></div>
+        <div class="gs">保暖内衣｜YAYA/鸭鸭</div>
+        <div class="gr">判定：秋冬材质词「保暖」</div>
+      </div></a></div></div>
+    <p class="note">排序依据：榜单「销量」区间中值（榜单销售额字段 1000 条均为 100w+，无区分度）。
+    商品图片来自抖音 CDN，需外网环境才能加载。点击卡片可跳转抖音商品页。</p>
+
+    <div class="sub-h">5.2 抖音热销应季类目 × 内部投放覆盖</div>
+    <table class="t">
+  <thead><tr><th>抖音应季类目</th><th>抖音榜单销量(估)</th><th>榜单商品数</th>
+  <th>对应内部类目</th><th>在投SPU</th><th>起量SPU</th><th>爆量SPU</th>
+  <th>日均消耗(万)</th><th>覆盖评估</th></tr></thead>
+  <tbody><tr>
+      <td class="nm">冲锋衣</td>
+      <td class="num">1,790,750</td>
+      <td class="num dim">74</td>
+      <td class="tag2">冲锋衣</td>
+      <td class="num">91</td>
+      <td class="num">26</td>
+      <td class="num boom">1</td>
+      <td class="num strong">7.3</td>
+      <td><span class="ok">覆盖良好</span></td></tr><tr>
+      <td class="nm">针织衫/毛衣/羊毛衫</td>
+      <td class="num">1,617,375</td>
+      <td class="num dim">60</td>
+      <td class="tag2">毛衣/针织衫、羊绒衫/羊毛衫</td>
+      <td class="num">545</td>
+      <td class="num">84</td>
+      <td class="num boom">8</td>
+      <td class="num strong">28.8</td>
+      <td><span class="ok">覆盖良好</span></td></tr><tr>
+      <td class="nm">塑身衣</td>
+      <td class="num">1,460,000</td>
+      <td class="num dim">18</td>
+      <td class="tag2">塑身衣、塑身连体衣</td>
+      <td class="num">26</td>
+      <td class="num">7</td>
+      <td class="num boom">0</td>
+      <td class="num strong">1.5</td>
+      <td><span class="ok">覆盖良好</span></td></tr><tr>
+      <td class="nm">时尚套装</td>
+      <td class="num">1,301,750</td>
+      <td class="num dim">43</td>
+      <td class="tag2">休闲套装、保暖套装</td>
+      <td class="num">282</td>
+      <td class="num">54</td>
+      <td class="num boom">0</td>
+      <td class="num strong">7.7</td>
+      <td><span class="ok">覆盖良好</span></td></tr><tr>
+      <td class="nm">夹克</td>
+      <td class="num">1,293,625</td>
+      <td class="num dim">42</td>
+      <td class="tag2">夹克</td>
+      <td class="num">101</td>
+      <td class="num">29</td>
+      <td class="num boom">5</td>
+      <td class="num strong">16.1</td>
+      <td><span class="ok">覆盖良好</span></td></tr><tr>
+      <td class="nm">其他外套</td>
+      <td class="num">1,001,375</td>
+      <td class="num dim">31</td>
+      <td class="tag2">短外套/中长款外套</td>
+      <td class="num">192</td>
+      <td class="num">27</td>
+      <td class="num boom">1</td>
+      <td class="num strong">2.9</td>
+      <td><span class="ok">覆盖良好</span></td></tr><tr>
+      <td class="nm">运动夹克/外套</td>
+      <td class="num">987,500</td>
+      <td class="num dim">45</td>
+      <td class="tag2">夹克、短外套/中长款外套</td>
+      <td class="num">291</td>
+      <td class="num">56</td>
+      <td class="num boom">6</td>
+      <td class="num strong">19.0</td>
+      <td><span class="ok">覆盖良好</span></td></tr><tr>
+      <td class="nm">卫衣</td>
+      <td class="num">980,000</td>
+      <td class="num dim">22</td>
+      <td class="tag2">卫衣</td>
+      <td class="num">326</td>
+      <td class="num">55</td>
+      <td class="num boom">5</td>
+      <td class="num strong">17.8</td>
+      <td><span class="ok">覆盖良好</span></td></tr><tr>
+      <td class="nm">保暖内衣</td>
+      <td class="num">900,000</td>
+      <td class="num dim">14</td>
+      <td class="tag2">保暖上衣、保暖套装、保暖裤</td>
+      <td class="num">314</td>
+      <td class="num">58</td>
+      <td class="num boom">3</td>
+      <td class="num strong">13.3</td>
+      <td><span class="ok">覆盖良好</span></td></tr><tr>
+      <td class="nm">风衣</td>
+      <td class="num">793,250</td>
+      <td class="num dim">30</td>
+      <td class="tag2">风衣</td>
+      <td class="num">92</td>
+      <td class="num">7</td>
+      <td class="num boom">0</td>
+      <td class="num strong">1.1</td>
+      <td><span class="ok">覆盖良好</span></td></tr><tr>
+      <td class="nm">羽绒服</td>
+      <td class="num">648,500</td>
+      <td class="num dim">53</td>
+      <td class="tag2">羽绒服</td>
+      <td class="num">116</td>
+      <td class="num">15</td>
+      <td class="num boom">0</td>
+      <td class="num strong">1.2</td>
+      <td><span class="ok">覆盖良好</span></td></tr><tr>
+      <td class="nm">连体袜</td>
+      <td class="num">412,500</td>
+      <td class="num dim">4</td>
+      <td class="tag2">连裤袜/打底袜</td>
+      <td class="num">51</td>
+      <td class="num">17</td>
+      <td class="num boom">1</td>
+      <td class="num strong">6.8</td>
+      <td><span class="ok">覆盖良好</span></td></tr><tr>
+      <td class="nm">休闲裤</td>
+      <td class="num">333,750</td>
+      <td class="num dim">15</td>
+      <td class="tag2">休闲裤</td>
+      <td class="num">17</td>
+      <td class="num">0</td>
+      <td class="num boom">0</td>
+      <td class="num strong">0.3</td>
+      <td><span class="low">覆盖偏低</span></td></tr><tr>
+      <td class="nm">居家服/睡衣</td>
+      <td class="num">275,750</td>
+      <td class="num dim">8</td>
+      <td class="tag2">睡衣套装/家居服套装、睡裙/家居裙</td>
+      <td class="num">183</td>
+      <td class="num">32</td>
+      <td class="num boom">0</td>
+      <td class="num strong">4.1</td>
+      <td><span class="ok">覆盖良好</span></td></tr><tr>
+      <td class="nm">运动套装</td>
+      <td class="num">236,750</td>
+      <td class="num dim">11</td>
+      <td class="tag2">健身套装/运动套装</td>
+      <td class="num">18</td>
+      <td class="num">2</td>
+      <td class="num boom">1</td>
+      <td class="num strong">1.4</td>
+      <td><span class="low">覆盖偏低</span></td></tr><tr>
+      <td class="nm">带胸垫打底衣</td>
+      <td class="num">225,000</td>
+      <td class="num dim">2</td>
+      <td class="tag2">带胸垫打底衣</td>
+      <td class="num">0</td>
+      <td class="num">0</td>
+      <td class="num boom">0</td>
+      <td class="num strong">0.0</td>
+      <td><span class="warn">未覆盖</span></td></tr><tr>
+      <td class="nm">长筒袜</td>
+      <td class="num">225,000</td>
+      <td class="num dim">2</td>
+      <td class="tag2">长筒袜、连裤袜/打底袜</td>
+      <td class="num">86</td>
+      <td class="num">24</td>
+      <td class="num boom">1</td>
+      <td class="num strong">7.5</td>
+      <td><span class="ok">覆盖良好</span></td></tr><tr>
+      <td class="nm">中筒袜</td>
+      <td class="num">225,000</td>
+      <td class="num dim">2</td>
+      <td class="tag2">中筒袜</td>
+      <td class="num">116</td>
+      <td class="num">23</td>
+      <td class="num boom">0</td>
+      <td class="num strong">3.8</td>
+      <td><span class="ok">覆盖良好</span></td></tr></tbody></table>
+    <p class="note">匹配口径：抖音榜单与内部投放表无共用商品 ID，故采用<b>类目级映射</b>匹配
+    （抖音四级叶子类目 → 内部四级类目，如 抖音「针织衫/毛衣/羊毛衫」→ 内部「毛衣/针织衫」+「羊绒衫/羊毛衫」）。
+    标注「未覆盖」的类目表示抖音有 100w+ 销售额的高 GMV 应季商品，但内部同类目零在投，是最高优先级的拓品缺口；
+    「覆盖偏低」表示内部起量 SPU 少于 5 个，供给厚度不足。</p>
+  </div>
+</section>
+
+<div class="foot">
+  数据来源：内部服饰换季品监控明细表（9/1-9/18，18天均值）｜抖音9月商品销售榜 TOP1000<br>
+  气温信息来源：中央气象台、中国气象局 2026年9月公开通报与新闻发布会<br>
+  口径提示：商品数按 SPUid 去重；日均消耗与日均下单次数按行加总；累计下单次数 = 日均下单次数 × 18
+</div>
+</div>
+<script>
+document.querySelectorAll('.tab').forEach(function(t){
+  t.addEventListener('click',function(){
+    document.querySelectorAll('.tab').forEach(function(x){x.classList.remove('on')});
+    document.querySelectorAll('.pane').forEach(function(x){x.classList.remove('on')});
+    t.classList.add('on');
+    document.getElementById(t.dataset.p).classList.add('on');
+  });
+});
+</script>
+</body></html>
