@@ -5,6 +5,7 @@
 
 # 中间产物
 _data.json
+_data_*.json
 _*.py
 _*.ps1
 

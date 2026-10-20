@@ -6,12 +6,25 @@ from collections import defaultdict, Counter
 warnings.filterwarnings('ignore')
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
 
-CSV_PATH = r'C:\Users\johnsywang\Desktop\服饰换季品监控.csv'
-XLSX_PATH = r'C:\Users\johnsywang\Desktop\抖音9月榜单.xlsx'
-OUT_HTML = r'C:\Users\johnsywang\Desktop\服饰秋冬应季品监控看板.html'
+HERE = os.path.dirname(os.path.abspath(__file__))
+MONTH = sys.argv[1] if len(sys.argv) > 1 else '09'
 
-DAYS = 18            # 数据窗口：9/1 - 9/18
-ORDER_THRESHOLD = 110   # 起量：累计下单次数 > 110
+# 每月配置：源 CSV / 数据窗口天数 / 环比基准月
+MONTH_CFG = {
+    '09': dict(csv=r'C:\Users\johnsywang\Desktop\服饰换季品监控.csv',
+               days=18, label='9月', start='9/1', end='9/18', end_day=18, n_days=30,
+               win='2026年9月1日 — 9月18日', prev=None),
+    '10': dict(csv=r'C:\Users\johnsywang\Desktop\10月应季品看板数据.csv',
+               days=19, label='10月', start='10/1', end='10/19', end_day=19, n_days=31,
+               win='2026年10月1日 — 10月19日', prev='09'),
+}
+CFG = MONTH_CFG[MONTH]
+CSV_PATH = CFG['csv']
+# 抖音榜单：10月未提供新榜单，沿用 9 月 TOP1000
+XLSX_PATH = r'C:\Users\johnsywang\Desktop\9.8整理\抖音9月榜单.xlsx'
+
+DAYS = CFG['days']
+ORDER_THRESHOLD = 110   # 起量：累计下单次数 > 110（累计 = 日均 × 窗口天数）
 BOOM_THRESHOLD = 10000  # 爆量：日均消耗 > 1w
 
 # ==========================================================
@@ -144,9 +157,11 @@ raw = [r for r in csv.DictReader(open(CSV_PATH, encoding='utf-8-sig'))
        if r.get('SPUid(及名称)')]
 
 TOTAL_COST_ALL = 0.0
+TOTAL_ORD_ALL = 0.0
 for r in csv.DictReader(open(CSV_PATH, encoding='utf-8-sig')):
     if r.get('运营二级行业名称') == '整体':
         TOTAL_COST_ALL = float(r['日均消耗(元)'] or 0)
+        TOTAL_ORD_ALL = float(r['日均下单次数(次)'] or 0)
 
 recs = []
 for r in raw:
@@ -182,8 +197,10 @@ def agg(rows):
     rise = sum(1 for v in by.values() if v['ord'] * DAYS > ORDER_THRESHOLD)
     boom = sum(1 for v in by.values() if v['cost'] > BOOM_THRESHOLD)
     cost = sum(v['cost'] for v in by.values())
-    return {'live': live, 'rise': rise, 'boom': boom, 'cost': cost,
-            'rise_rate': rise / live * 100 if live else 0}
+    ord_d = sum(v['ord'] for v in by.values())
+    orders = ord_d * DAYS
+    return {'live': live, 'rise': rise, 'boom': boom, 'cost': cost, 'orders': orders,
+            'ord_d': ord_d, 'rise_rate': rise / live * 100 if live else 0}
 
 
 def risen_spus(rows):
@@ -225,6 +242,67 @@ for x in season:
     d['ord'] += x['ord']
     d['spus'].add(x['spu'])
 top_leaf = sorted(leaf_stat.items(), key=lambda kv: -kv[1]['cost'])[:20]
+
+
+# ---------- 1~4 级类目层级树 ----------
+def cat_parts(cat_full):
+    """把「商品统一类目V2」拆成规范化的 1~4 级列表"""
+    if not cat_full or cat_full in ('空', '0'):
+        return ['未分类']
+    return [p.strip() or '未分类' for p in cat_full.split('-')][:4]
+
+
+# 仅保留这 3 个一级类目
+TREE_ROOT_WHITE = ['服饰鞋包', '运动户外', '珠宝/首饰/手表']
+
+# 每一级前缀 -> 明细行（仅白名单一级类目）
+tree_src = [x for x in season if cat_parts(x['cat_full'])[0] in TREE_ROOT_WHITE]
+prefix_rows = defaultdict(list)
+for x in tree_src:
+    parts = cat_parts(x['cat_full'])
+    for i in range(1, len(parts) + 1):
+        prefix_rows[tuple(parts[:i])].append(x)
+
+# 每个前缀的直接子节点
+children = defaultdict(set)
+for key in prefix_rows:
+    if len(key) > 1:
+        children[key[:-1]].add(key)
+roots = sorted({k for k in prefix_rows if len(k) == 1},
+               key=lambda k: -sum(r['cost'] for r in prefix_rows[k]))
+tree_scope = agg(tree_src)
+
+# 各级展开宽度与消耗下限（控制表格规模）
+TOPN = {1: 99, 2: 12, 3: 10, 4: 10}
+MIN_COST = {1: 0, 2: 300, 3: 300, 4: 300}
+cat_tree = []
+
+
+def walk(key, depth):
+    rows = prefix_rows[key]
+    a = agg(rows)
+    kids = sorted(children.get(key, ()),
+                  key=lambda k: -sum(r['cost'] for r in prefix_rows[k]))
+    kids = [k for k in kids
+            if sum(r['cost'] for r in prefix_rows[k]) >= MIN_COST.get(depth + 1, 0)]
+    kids = kids[:TOPN.get(depth + 1, 0)]
+    s_cost = sum(r['cost'] for r in rows if r['lvl'] == 'S')
+    cat_tree.append({
+        'lvl': depth, 'name': key[-1], 'path': '/'.join(key),
+        'parent': '/'.join(key[:-1]), 'has_kid': bool(kids),
+        's_share': s_cost / a['cost'] * 100 if a['cost'] else 0,
+        **a,
+    })
+    for k in kids:
+        walk(k, depth + 1)
+
+
+for r in roots:
+    walk(r, 1)
+
+print('类目树节点数', len(cat_tree), '| 各级分布',
+      Counter(n['lvl'] for n in cat_tree))
+print('类目树覆盖范围', tree_scope, '| 一级类目', [n['name'] for n in cat_tree if n['lvl'] == 1])
 
 # ==========================================================
 # 五、拓品清单
@@ -363,24 +441,43 @@ for leaf in dy_leaf_vol:
 cover_total = agg(cover_spu_rows)
 
 # ==========================================================
-# 七、气温数据（基于公开报道还原的趋势）
+# 七、气温数据（基于公开报道还原的趋势示意，非逐日实测站点均值）
 # ==========================================================
-# 全国省会级城市日均气温趋势示意（℃），基于中央气象台/中国气象局公开通报的
-# 冷空气节点与"北方入秋、南方秋老虎"格局还原
-TEMP_DATES = list(range(1, 31))
-TEMP_NORTH = [27.5, 27.8, 28.2, 28.0, 27.2, 24.6, 22.4, 21.0, 20.2, 21.5,
-              22.8, 23.6, 24.2, 24.6, 24.0, 23.4, 23.8, 24.2, 21.6, 19.4,
-              18.8, 20.2, 18.4, 17.6, 17.0, 16.2, 17.4, 18.0, 17.2, 15.4]
-TEMP_SOUTH = [31.2, 31.5, 31.8, 32.0, 32.2, 32.0, 31.6, 31.2, 31.0, 31.4,
-              31.8, 32.0, 32.2, 32.4, 32.6, 32.4, 32.2, 32.0, 31.6, 31.0,
-              30.4, 30.8, 30.0, 29.4, 28.8, 28.2, 28.6, 29.0, 28.4, 27.2]
-COLD_WAVES = [
-    {'s': 6, 'e': 9, 'label': '第1轮冷空气', 'desc': '9/6起自西向东影响西北、华北、东北，多地气温创立秋后新低（中央气象台）'},
-    {'s': 19, 'e': 21, 'label': '第2轮冷空气', 'desc': '9/19北方局地降温近20℃，黑龙江爱辉降幅达19℃（中国气象局）'},
-    {'s': 23, 'e': 24, 'label': '第3轮冷空气', 'desc': '9月底前4次冷空气过程之一，影响西北、华北、东北'},
-    {'s': 25, 'e': 26, 'label': '第4轮冷空气', 'desc': '强度逐渐增强，北方气温波动下行'},
-    {'s': 30, 'e': 30, 'label': '第5轮冷空气', 'desc': '9/30前后，国庆前再度降温'},
-]
+# kind: obs 实况 / proc 过程报道(降幅未后验) / fc 过程预报 / sig 日期信号
+TEMP_CFG = {
+    '09': dict(
+        dates=list(range(1, 31)),
+        north=[27.5, 27.8, 28.2, 28.0, 27.2, 24.6, 22.4, 21.0, 20.2, 21.5,
+               22.8, 23.6, 24.2, 24.6, 24.0, 23.4, 23.8, 24.2, 21.6, 19.4,
+               18.8, 20.2, 18.4, 17.6, 17.0, 16.2, 17.4, 18.0, 17.2, 15.4],
+        south=[31.2, 31.5, 31.8, 32.0, 32.2, 32.0, 31.6, 31.2, 31.0, 31.4,
+               31.8, 32.0, 32.2, 32.4, 32.6, 32.4, 32.2, 32.0, 31.6, 31.0,
+               30.4, 30.8, 30.0, 29.4, 28.8, 28.2, 28.6, 29.0, 28.4, 27.2],
+        waves=[
+            {'s': 6, 'e': 9, 'kind': 'obs', 'label': '第1轮冷空气', 'desc': '9/6起自西向东影响西北、华北、东北，多地气温创立秋后新低（中央气象台）'},
+            {'s': 19, 'e': 21, 'kind': 'obs', 'label': '第2轮冷空气', 'desc': '9/19北方局地降温近20℃，黑龙江爱辉降幅达19℃（中国气象局）'},
+            {'s': 23, 'e': 24, 'kind': 'obs', 'label': '第3轮冷空气', 'desc': '9月底前4次冷空气过程之一，影响西北、华北、东北'},
+            {'s': 25, 'e': 26, 'kind': 'obs', 'label': '第4轮冷空气', 'desc': '强度逐渐增强，北方气温波动下行'},
+            {'s': 30, 'e': 30, 'kind': 'obs', 'label': '第5轮冷空气', 'desc': '9/30前后，国庆前再度降温'},
+        ]),
+    # 10月：曲线仅画到 10/19（资料截点），之后只标预报窗口，不补造逐日温度
+    '10': dict(
+        dates=list(range(1, 20)),
+        north=[17.5, 15.8, 14.2, 13.0, 13.6, 14.5, 15.2, 15.8, 16.6, 17.2,
+               17.0, 15.6, 14.8, 15.4, 16.2, 16.8, 17.2, 15.8, 10.4],
+        south=[26.5, 24.0, 23.6, 24.0, 24.6, 25.0, 25.4, 25.8, 26.4, 26.8,
+               27.0, 26.8, 26.6, 26.8, 27.0, 27.2, 27.0, 26.8, 26.2],
+        waves=[
+            {'s': 1, 'e': 1, 'kind': 'obs', 'label': '10/1 中东部', 'desc': '实况：贵州、湖南、湖北等多地降温 6—12℃（央视网转引中国天气网 10/2）'},
+            {'s': 3, 'e': 3, 'kind': 'obs', 'label': '10/3 北方', 'desc': '实况：甘肃、内蒙古等部分地区降温超 10℃，局地 15℃ 以上（10/4 报道）'},
+            {'s': 12, 'e': 12, 'kind': 'proc', 'label': '10/12 北方', 'desc': '过程报道：冷空气正在影响北方，后续降幅未经后验核实'},
+            {'s': 18, 'e': 19, 'kind': 'obs', 'label': '10/18-19 北方', 'desc': '实况：内蒙古、东北、京津、河北北部部分地区降温 8—12℃，局地超 15℃（中央气象台 10/19）'},
+            {'s': 19, 'e': 21, 'kind': 'fc', 'label': '10/19-21 预报', 'desc': '预报：中东部大部降温 4—6℃，华北西部、东北部分地区超 8℃（中央气象台 10/19）'},
+            {'s': 24, 'e': 26, 'kind': 'fc', 'label': '10/24-26 预报', 'desc': '预报：中东部大部降温 4—6℃，局地 8℃ 左右（中央气象台 10/19）'},
+            {'s': 28, 'e': 28, 'kind': 'sig', 'label': '10/28 信号', 'desc': '日期信号：中央气象台列为冷空气影响时段之一，未给地域与降幅'},
+        ]),
+}
+TC = TEMP_CFG[MONTH]
 
 print('=== 核心指标 ===')
 print('全库 SPU 行', len(recs), '应季行', len(season))
@@ -393,16 +490,27 @@ print('等级', json.dumps(by_lvl, ensure_ascii=False))
 print('抖音应季', len(dy_season), '/', len(dy))
 print('抖音覆盖总计', cover_total)
 
+# 应季 SPU 级日均消耗（用于月环比的 延续/新增/退出 归因）
+season_spu_cost = defaultdict(float)
+for x in season:
+    season_spu_cost[x['spu']] += x['cost']
+
 DATA = dict(
+    META=dict(month=MONTH, label=CFG['label'], days=DAYS, start=CFG['start'], end=CFG['end'],
+              end_day=CFG['end_day'], n_days=CFG['n_days'], win=CFG['win'], prev=CFG['prev'],
+              csv=os.path.basename(CSV_PATH), xlsx=os.path.basename(XLSX_PATH)),
     overall=overall, overall_all=overall_all, by_channel=by_channel,
     by_cat=by_cat, by_link=by_link, by_lvl=by_lvl,
     top_leaf=[(k, {'cost': v['cost'], 'n': len(v['spus']), 'ord': v['ord'] * DAYS}) for k, v in top_leaf],
+    cat_tree=cat_tree, tree_scope=tree_scope, tree_roots=TREE_ROOT_WHITE,
     list_qyt2adq=list_qyt2adq, list_cid2shop=list_cid2shop,
     dy_top={k: v for k, v in dy_top.items()}, cover=cover, cover_total=cover_total,
     dy_n=len(dy), dy_season_n=len(dy_season),
-    TEMP_DATES=TEMP_DATES, TEMP_NORTH=TEMP_NORTH, TEMP_SOUTH=TEMP_SOUTH,
-    COLD_WAVES=COLD_WAVES, TOTAL_COST_ALL=TOTAL_COST_ALL,
+    TEMP_DATES=TC['dates'], TEMP_NORTH=TC['north'], TEMP_SOUTH=TC['south'],
+    COLD_WAVES=TC['waves'], TOTAL_COST_ALL=TOTAL_COST_ALL, TOTAL_ORD_ALL=TOTAL_ORD_ALL,
+    season_spu_cost={k: round(v, 2) for k, v in season_spu_cost.items()},
+    spu_name={k: v for k, v in spu_name.items()}, spu_cat={k: v for k, v in spu_cat.items()},
 )
-json.dump(DATA, open(os.path.join(os.path.dirname(os.path.abspath(__file__)), '_data.json'), 'w', encoding='utf-8'),
-          ensure_ascii=False, indent=1)
-print('\n数据已导出 _data.json')
+OUT_JSON = os.path.join(HERE, f'_data_{MONTH}.json')
+json.dump(DATA, open(OUT_JSON, 'w', encoding='utf-8'), ensure_ascii=False, indent=1)
+print('\n数据已导出', OUT_JSON)
